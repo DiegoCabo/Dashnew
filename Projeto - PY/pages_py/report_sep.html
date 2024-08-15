@@ -1,0 +1,536 @@
+<!doctype html>
+
+<html lang="pt-br" data-bs-theme="auto">
+<head>
+<meta charset="utf-8">
+<title>Dashboard Planejamento</title>
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='/css/report_sep.css') }}">
+<script src="{{url_for('static', filename='/js/report_sep.js')}}"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://code.jquery.com/jquery-3.6.1.slim.min.js"
+        integrity="sha256-w8CvhFs7iHNVUtnSP0YKEg00p9Ih13rlL9zGqvLdePA=" crossorigin="anonymous"></script>        
+        
+</head>
+<body id="body-pd">
+    <header class="header" id="header">
+        <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
+        <div class="header_img"> <img src="./img/eu.jpeg" alt=""> </div>
+    </header>
+    <div class="l-navbar" id="nav-bar">
+        <nav class="nav">
+            <div> <a href="#" class="nav_logo"> <i  class='bx bx-layer nav_logo-icon'></i> <span class="nav_logo-name">Planejamento</span> </a>
+                <div class="nav_list"> <a href="./index.html" class="nav_link active"> <i class='bx bx-grid-alt nav_icon'></i> <span class="nav_name">Dashboard Voz</span> </a> <a href="./uso.html" class="nav_link"> <i class='bx bx-message-square-detail nav_icon'></i> <span class="nav_name">Dashboard USO</span> </a> <a href="./cobraca.html" class="nav_link"> <i class='bx bx-message-square-detail nav_icon'></i> <span class="nav_name">Dash. Cobrança</span> </a> <a href="./pages_py/massivas.html" class="nav_link"> <i class='bx bx-bookmark nav_icon'></i> <span class="nav_name">Massivas</span> </a> <a href="operadores.html" class="nav_link"> <i class='bx bx-folder nav_icon'></i> <span class="nav_name">Produtividade Op.</span> </a> <a href="https://monitor-callcenter.go.akamai-access.com/acompanhamento" target="_blank" class="nav_link"> <i class='bx bx-bar-chart-alt-2 nav_icon'></i> <span class="nav_name">Monitorar Cidades</span> </a> </div>
+            </div> <a href="https://cors-anywhere.herokuapp.com/corsdemo" target="_blank" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">Desbloquear Rede</span> </a>
+        </nav>
+    </div>
+    <!--Container Main start-->
+    <div class="height-100 bg-light">
+        <div class="data1">
+            <input class="datastart" type="date" id="start" name="trip-start" min="2023-01-01" max="2023-12-31">
+            <input class="dataend" type="date" id="end" name="trip-end" min="2023-01-01" max="2023-12-31">
+            <button onclick="updategeral()"><i class="fa-solid fa-rotate"></i></button>
+            <button onclick="update_cadastro()"><i class="fa-solid fa-rotate"></i></button>
+        </div>
+        
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-6">
+
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border-info">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <button class="update_ret_card " onclick="update_geral()">
+                                Geral
+                            </button>
+                            <div>
+                                <p class="mb-0 text-secondary">Total</p>
+                                <h4 id="total_geral">0</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-bloody text-white ms-auto"><i
+                                    class="fa-solid fa-phone-flip" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border-danger">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">Atendidas</p>
+                                <h4 id="atendidas_geral">0</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-bloody text-white ms-auto"><i
+                                    class="fa-solid fa-phone-volume" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border-success">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">% Atendidas</p>
+                                <h4 id="pca_geral">0</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-ohhappiness text-white ms-auto">
+                                <i id=change class="fa fa-bar-chart" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border-warning">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">Aband.</p>
+                                <h4 id="abandonadas_geral">0</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-blooker text-white ms-auto"><i
+                                    class="fa-solid fa-phone-slash" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border border-primary">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">TME</p>
+                                <h4 id="tme_geral">00:00:00</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-blooker text-white ms-auto"><i
+                                    class="fa-solid fa-clock" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border border-secondary">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">TMA</p>
+                                <h4 id="tma_geral">00:00:00</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-blooker text-white ms-auto"><i
+                                    class="fa fa-users" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <!---->
+
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border-info">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <button class="update_ret_card " onclick="updatconsolidsac()">
+                                SAC
+                            </button>
+                            <div>
+                                <p class="mb-0 text-secondary">Total</p>
+                                <h4 id="total_consolidadoSAC">0</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-bloody text-white ms-auto"><i
+                                    class="fa-solid fa-phone-flip" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border-danger">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">Atendidas</p>
+                                <h4 id="atendidas_consolidadoSAC">0</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-bloody text-white ms-auto"><i
+                                    class="fa-solid fa-phone-volume" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border-success">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">% Atendidas</p>
+                                <h4 id="pca_consolidadoSAC">0</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-ohhappiness text-white ms-auto">
+                                <i id=change class="fa fa-bar-chart" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border-warning">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">Aband.</p>
+                                <h4 id="abandonadas_consolidadoSAC">0</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-blooker text-white ms-auto"><i
+                                    class="fa-solid fa-phone-slash" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border border-primary">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">TME</p>
+                                <h4 id="tme_consolidadoSAC">00:00:00</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-blooker text-white ms-auto"><i
+                                    class="fa-solid fa-clock" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border border-secondary">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">TMA</p>
+                                <h4 id="tma_consolidadoSAC">00:00:00</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-blooker text-white ms-auto"><i
+                                    class="fa fa-users" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!---->
+
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border-info">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <button class="update_ret_card " onclick="updatconsolidhd()">
+                                HD
+                            </button>
+                            <div>
+                                <p class="mb-0 text-secondary">Total</p>
+                                <h4 id="total_consolidadoHD">0</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-bloody text-white ms-auto"><i
+                                    class="fa-solid fa-phone-flip" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border-danger">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">Atendidas</p>
+                                <h4 id="atendidas_consolidadoHD">0</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-bloody text-white ms-auto"><i
+                                    class="fa-solid fa-phone-volume" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border-success">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">% Atendidas</p>
+                                <h4 id="pca_consolidadoHD">0</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-ohhappiness text-white ms-auto">
+                                <i id=change class="fa fa-bar-chart" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border-warning">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">Aband.</p>
+                                <h4 id="abandonadas_consolidadoHD">0</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-blooker text-white ms-auto"><i
+                                    class="fa-solid fa-phone-slash" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border border-primary">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">TME</p>
+                                <h4 id="tme_consolidadoHD">00:00:00</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-blooker text-white ms-auto"><i
+                                    class="fa-solid fa-clock" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border border-secondary">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">TMA</p>
+                                <h4 id="tma_consolidadoHD">00:00:00</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-blooker text-white ms-auto"><i
+                                    class="fa fa-users" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!---->
+
+            <table class="table" id="tabela1">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Atendidas</th>
+                        <th scope="col">PCA</th>
+                        <th scope="col">Abandonadas</th>
+                        <th scope="col">TME</th>
+                        <th scope="col">TMA</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row"> <button class="update_ret" onclick="update_sac_ct()">
+                                <i class="fa-solid fa-rotate"></i>
+                            </button> SAC RN</th>
+                        <td id="total_ct">0</td>
+                        <td id="atendidas_ct">0</td>
+                        <td id="pca_ct">0</td>
+                        <td id="abandonadas_ct">0</td>
+                        <td id="tme_ct">0</td>
+                        <td id="tma_ct">0</td>
+                    </tr>
+                    <tr>
+                        <th scope="row"> <button class="update_ret" onclick="update_sac_ce()">
+                                <i class="fa-solid fa-rotate"></i>
+                            </button> SAC CE</th>
+                        <td id="total_ce">0</td>
+                        <td id="atendidas_ce">0</td>
+                        <td id="pca_ce">0</td>
+                        <td id="abandonadas_ce">0</td>
+                        <td id="tme_ce">0</td>
+                        <td id="tma_ce">0</td>
+                    </tr>
+                    <tr>
+                        <th scope="row"> <button class="update_ret" onclick="update_sac_sud()">
+                                <i class="fa-solid fa-rotate"></i>
+                            </button> SAC SE</th>
+                        <td id="total_sud">0</td>
+                        <td id="atendidas_sud">0</td>
+                        <td id="pca_sud">0</td>
+                        <td id="abandonadas_sud">0</td>
+                        <td id="tme_sud">0</td>
+                        <td id="tma_sud">0</td>
+                    </tr>
+                    <tr>
+                        <th scope="row"> <button class="update_ret" onclick="updatealares_SAC()">
+                                <i class="fa-solid fa-rotate"></i>
+                            </button> SAC ALARES</th>
+                        <td id="sacAlares_total">0</td>
+                        <td id="sacAlares_atendidas">0</td>
+                        <td id="sacAlares_pca">0</td>
+                        <td id="sacAlares_abandonadas">0</td>
+                        <td id="sacAlares_tme">0</td>
+                        <td id="sacAlares_tma">0</tdid>
+                    </tr>
+                    <tr>
+                </tbody>
+
+                <table class="table" id="tabela4">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col">Total</th>
+                            <th scope="col">Atendidas</th>
+                            <th scope="col">PCA</th>
+                            <th scope="col">Abandonadas</th>
+                            <th scope="col">TME</th>
+                            <th scope="col">TMA</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row"> <button class="update_ret" onclick="update_desbloqueio()">
+                                    <i class="fa-solid fa-rotate"></i>
+                                </button> DESBLOQUEIO</th>
+                            <td id="DESalares_total">0</td>
+                            <td id="DESalares_atendidas">0</td>
+                            <td id="DESalares_pca">0</td>
+                            <td id="DESalares_abandonadas">0</td>
+                            <td id="DESalares_tme">0</td>
+                            <td id="DESalares_tma">0</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"> <button class="update_ret" onclick="update_segundavia()">
+                                    <i class="fa-solid fa-rotate"></i>
+                                </button> 2ª VIA</th>
+                            <td id="VIAalares_total">0</td>
+                            <td id="VIAalares_atendidas">0</td>
+                            <td id="VIAalares_pca">0</td>
+                            <td id="VIAalares_abandonadas">0</td>
+                            <td id="VIAalares_tme">0</td>
+                            <td id="VIAalares_tma">0</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+            </table>
+
+            <table class="table" id="table2">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Atendidas</th>
+                        <th scope="col">PCA</th>
+                        <th scope="col">Abandonadas</th>
+                        <th scope="col">TME</th>
+                        <th scope="col">TMA</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row"> <button class="update_ret" onclick="update_hd_ct()">
+                                <i class="fa-solid fa-rotate"></i>
+                            </button> HD RN</th>
+                        <td id="total_hd_ct">0</td>
+                        <td id="atendidas_hd_ct">0</td>
+                        <td id="pca_hd_ct">0</td>
+                        <td id="abandonadas_hd_ct">0</td>
+                        <td id="tme_hd_ct">0</td>
+                        <td id="tma_hd_ct">0</td>
+                    </tr>
+                    <tr>
+                        <th scope="row"> <button class="update_ret" onclick="update_hd_ce()">
+                                <i class="fa-solid fa-rotate"></i>
+                            </button> HD CE</th>
+                        <td id="total_hd_ce">0</td>
+                        <td id="atendidas_hd_ce">0</td>
+                        <td id="pca_hd_ce">0</td>
+                        <td id="abandonadas_hd_ce">0</td>
+                        <td id="tme_hd_ce">0</td>
+                        <td id="tma_hd_ce">0</td>
+                    </tr>
+                    <tr>
+                        <th scope="row"> <button class="update_ret" onclick="update_hd_sud()">
+                                <i class="fa-solid fa-rotate"></i>
+                            </button> HD SE</th>
+                        <td id="total_hd_sud">0</td>
+                        <td id="atendidas_hd_sud">0</td>
+                        <td id="pca_hd_sud">0</td>
+                        <td id="abandonadas_hd_sud">0</td>
+                        <td id="tme_hd_sud">0</td>
+                        <td id="tma_hd_sud">0</td>
+                    </tr>
+                    <th scope="row"> <button class="update_ret" onclick="updatealares_HD()">
+                        <i class="fa-solid fa-rotate"></i>
+                    </button> HD ALARES</th>
+                <td id="HDalares_total">0</td>
+                <td id="HDalares_atendidas">0</td>
+                <td id="HDalares_pca">0</td>
+                <td id="HDalares_abandonadas">0</td>
+                <td id="HDalares_tme">0</td>
+                <td id="HDalares_tma">0</td>
+            </tr>
+            <tr>
+                </tbody>
+            </table>
+
+            <table class="table" id="tabela3">
+                <thead class="thead-dark">
+                    <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col">Total</th>
+                            <th scope="col">Atendidas</th>
+                            <th scope="col">PCA</th>
+                            <th scope="col">Abandonadas</th>
+                            <th scope="col">TME</th>
+                            <th scope="col">TMA</th>
+                        </tr>
+                    </thead>
+                <tbody>
+                        <th scope="row"> <button class="update_ret" onclick="updatealares_RET()">
+                            <i class="fa-solid fa-rotate"></i>
+                            </button> RET UNIFICADA</th>
+                        <td id="RETalares_total">0</td>
+                        <td id="RETalares_atendidas">0</td>
+                        <td id="RETalares_pca">0</td>
+                        <td id="RETalares_abandonadas">0</td>
+                        <td id="RETalares_tme">0</td>
+                        <td id="RETalares_tma">0</td>
+                    </tr>
+                    <th scope="row"> <button class="update_ret" onclick="updat_RETalares()">
+                        <i class="fa-solid fa-rotate"></i>
+                        </button> RET ALARES</th>
+                    <td id="RETalares_total1">0</td>
+                    <td id="RETalares_atendidas1">0</td>
+                    <td id="RETalares_pca1">0</td>
+                    <td id="RETalares_abandonadas1">0</td>
+                    <td id="RETalares_tme1">0</td>
+                    <td id="RETalares_tma1">0</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    </div>
+    <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./js/blip_hd.js"></script>
+    <script src="./js/blip_sac.js"></script>    </body>
+</html>

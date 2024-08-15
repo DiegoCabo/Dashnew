@@ -1,0 +1,37 @@
+// Função para aplicar o background e o border-radius nos elementos <td> com base em diferentes condições
+function applyBackground() {
+  // Capturar todos os elementos <td> com a classe "ng-binding"
+  var tdElements = document.getElementsByClassName("ng-binding");
+
+  // Iterar sobre os elementos capturados
+  for (var i = 0; i < tdElements.length; i++) {
+    var tdElement = tdElements[i];
+    var text = tdElement.textContent.trim();
+
+    // Verificar as diferentes condições e aplicar o estilo correspondente
+    if (text === "Atendimento Digital") {
+      tdElement.style.backgroundColor = "rgb(173,216,230)"; // Azul
+      tdElement.style.borderRadius = "15px";
+    } else if (text === "Feedback") {
+      tdElement.style.backgroundColor = "rgb(255,255,0)"; // amarelo
+      tdElement.style.borderRadius = "15px";
+    } else if (text === "Treinamento") {
+      tdElement.style.backgroundColor = "rgb(152,251,152)"; // Verde
+      tdElement.style.borderRadius = "15px";
+    } else if (text === "Problema Sistêmico") {
+      tdElement.style.backgroundColor = "rgb(250,128,114)"; // vermelho
+      tdElement.style.borderRadius = "15px";
+    } 
+  }
+}
+
+// Função para verificar se a página foi totalmente carregada
+function checkPageLoaded() {
+  if (document.readyState === "complete") {
+    // A página foi totalmente carregada, então aplicar o background e o border-radius
+    applyBackground();
+  }
+}
+
+// Executar a função a cada 15 segundos
+setInterval(checkPageLoaded, 15000);

@@ -1,0 +1,427 @@
+<span style="font-family: verdana, geneva, sans-serif;">
+  <!DOCTYPE html>
+  <html lang="en">
+
+  <head>
+    <meta charset="utf-8" initial-scale=0.5>
+    <title>Dashboard Planejamento</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='/css/index_novo.css') }}">
+    <script src="{{url_for('static', filename='/js/index.js')}}"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link rel="icon" type="image/jpg" href="{{ url_for('static', filename='/img/alaresVERDE.png') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src='https://cdn.plot.ly/plotly-2.27.0.min.js'></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
+
+
+    <!--CSS-->
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
+
+    <!--JS-->
+    <script src="{{url_for('static', filename='/assets/js/color-modes.js')}}"></script>
+    <script src="{{url_for('static', filename='/assets/dist/js/bootstrap.bundle.min.js')}}"></script>
+
+
+    <!--Tabela-->
+    <link href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="//cdn.datatables.net/select/1.3.3/css/select.dataTables.min.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <div class="container">
+      <nav>
+        <ul>
+          <li><a href="#" class="logo">
+              <img src="/static/img/pngwing.com.png" alt="" style="    border: 3px solid #6b50ff;border-radius: 50%;">
+              <span class="nav-item" style="color: #6b50ff;">DashBoard</span>
+            </a></li>
+          <li><a href="home">
+              <i class="fas fa-home"></i>
+              <span class="nav-item">Home</span>
+            </a></li>
+          <li><a href="painelVoz">
+              <i class="fas fa-chart-line"></i>
+              <span class="nav-item">Dash</span>
+            </a></li>
+          <li><a href="">
+              <i class="fas fa-wallet"></i>
+              <span class="nav-item">Wallet</span>
+            </a></li>
+          <li><a href="massivas">
+              <i class="fas fa-circle-exclamation"></i>
+              <span class="nav-item">Massivas</span>
+            </a></li>
+          <li><a href="clientesUSO">
+              <i class="fas fa-comment""></i>
+              <span class="nav-item">Sent. Uso</span>
+            </a></li>
+          <li><a href="encerramentoUSO">
+              <i class="fas fa-cog"></i>
+              <span class="nav-item">Enc. Uso</span>
+            </a></li>
+          <li><a href="">
+              <i class="fas fa-question-circle"></i>
+              <span class="nav-item">Help</span>
+            </a></li>
+          <li><a href="" class="logout">
+              <i class="fas fa-sign-out-alt"></i>
+              <span class="nav-item">Log out</span>
+            </a></li>
+        </ul>
+      </nav>
+
+      <section class="main">
+        <div class="main-top">
+          <h1 style="font-size: 20px; color:#6b50ff;">Control Desk</h1>
+          <i class="fas fa-user-cog"></i>
+        </div>
+
+        <div class="main-skills">
+
+          <div class="card">
+            <img src="/static/img/customer-service.png" alt="" srcset="" style="width: 45px; height: 45px;">
+            <h3>RECEBIDAS</h3>
+            <h3 id="valor_recebidas">0</h3>
+            <div style="display: flex; justify-content: center; font-size: 15px;">
+            <h4>HD: </h4><div id="total_consolidadoHD"> 0</div></div>
+            <div style="display: flex; justify-content: center; font-size: 15px;">
+            <h4>SAC: </h4><div id="total_consolidadoSAC"> 0</div></div>
+          </div>
+
+          <div class="card">
+            <img src="/static/img/customer-service2.png" alt="" srcset="" style="width: 45px; height: 45px;">
+            <h3>ATENDIDAS</h3>
+            <h3 id="valor_atendidas">0</h3>
+            <div id="atendidas_consolidadoHD">0</div>
+            <div id="atendidas_consolidadoSAC">0</div>
+          </div>
+          <div class="card">
+            <img src="/static/img/customer-support.png" alt="" srcset="" style="width: 45px; height: 45px;">
+            <h3>ABANDONADAS</h3>
+            <h3 id="valor_aband">0</h3>
+            <div id="abandonadas_consolidadoHD">0</div>
+            <div id="abandonadas_consolidadoSAC">0</div>
+          </div>
+          <div class="card">
+            <img src="/static/img/customer-support.png" alt="" srcset="" style="width: 45px; height: 45px;">
+            <h3>PCA(%)</h3>
+            <h3 id="valor_pca">0%</h3>
+            <div id="pca_consolidadoHD">0%</div>
+            <div id="pca_consolidadoSAC">0%</div>
+          </div>
+
+          <div class="card">
+            <img src="/static/img/hotline.png" alt="" srcset="" style="width: 45px; height: 45px;">
+            <h3>TME</h3>
+            <h3 id="valor_tme">00:00:00</h3>
+            <div id="tme_consolidadoHD">00:00:00</div>
+            <div id="tme_consolidadoSAC">00:00:00</div>       
+          </div>
+
+          <div class="card">
+            <img src="/static/img/customer-service (1).png" alt="" srcset="" style="width: 45px; height: 45px;">
+            <h3>TMA</h3>
+            <h3 id="valor_tma">00:00:00</h3>
+            <div id="tma_consolidadoHD">00:00:00</div>
+            <div id="tma_consolidadoSAC">00:00:00</div>  
+            </div> 
+        </div>
+
+        <section class="main-course">
+          <h1>REAL TIME - FILAS</h1>
+          <button class="btn btn-primary" onclick="update_filas()" style="background-color: #9e8dff; padding: 10px; border-radius: 10px; cursor: pointer; font-size: 10px;"> VOZ </button>
+          <button class="btn btn-primary" onclick="chat()" style="background-color: #9e8dff; padding: 10px; border-radius: 10px; cursor: pointer; font-size: 10px;"> CHAT </button>
+
+          <div class="main-skills">
+
+            <div class="card">
+              <img src="/static/img/customer-service.png" alt="" srcset="" style="width: 35px; height: 35px;">
+              <h3>ESPERA VOZ</h3>
+              <h3 id="valor_espera">0</h3>
+
+            </div>
+
+            <div class="card">
+              <img src="/static/img/customer-service2.png" alt="" srcset="" style="width: 35px; height: 35px;">
+              <h3>ATENDIMENTO VOZ</h3>
+              <h3 id="valor_chamando">0</h3>
+
+            </div>
+
+            <div class="card">
+              <img src="/static/img/vetor-1.png" alt="" srcset="" style="width: 35px; height: 35px;">
+              <h3>ESPERA CHAT</h3>
+              <h3 id="chatTotal">0</h3>
+
+            </div>
+
+            <div class="card">
+              <h2 style="color: #6b50ff;font-size: 20px; margin-bottom: 14px;">WEBBY</h2>
+              <h3>ESPERA CHAT</h3>
+              <h3 id="chatTME">0</h3>
+
+            </div>
+
+            <div class="card">
+              <h2 style="font-size: 20px; margin-bottom: 14px;color: #6b50ff">ALARES / WEBBY</h2>
+              <h3>CHAT - LOG. / DISP. </h3>
+
+              <div style="display: flex; justify-content: center; align-items: center;">
+                <h4 id="chatTotalLogados">0</h4> / <h4 id="chatDispo">0</h4>
+              </div>
+
+              <div style="display: flex; justify-content: center; align-items: center;">
+                <h4 id="chatTotalLogados2">0</h4> / <h4 id="chatDispo2">0</h4>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="main-course">
+          <h1>VOLUMETRIA E BLOQUEIOS</h1>
+          <button class="btn btn-primary" onclick="updateGrafico()" style="background-color: #9e8dff; padding: 10px; border-radius: 10px; cursor: pointer; font-size: 10px;"> Volume </button>
+          <button class="btn btn-primary" onclick="demanda()" style="background-color: #9e8dff; padding: 10px;border-radius: 10px; cursor: pointer;font-size: 10px;"> Bloqueios </button>
+          <div class="course-box">
+            <div class="course">
+              <div class="box1">
+              <div id="render_grafico">
+              </div>
+              </div>
+              <div class="box">
+
+                <div id='myDiv'>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="main-course">
+          <h1>ABS E ALERTAS</h1>
+          <button class="btn btn-primary" onclick="escalados()" style="background-color: #9e8dff; padding: 10px; border-radius: 10px; cursor: pointer; font-size: 10px;"> ABS </button>
+          <button class="btn btn-primary" onclick="alertas()" style="background-color: #9e8dff; padding: 10px; border-radius: 10px; cursor: pointer; font-size: 10px;"> ALERTAS </button>
+         
+          <div class="course-box">
+            <div class="course">
+              <div class="box">
+                <table id="tbody" class="table sortable" style="text-align: center">
+                  <thead>
+                    <tr>
+                      <th>Setor</th>
+                      <th>Escalados</th>
+                      <th>Logados</th>
+                      <th>Abd (%)</th>
+                      <th>Atualização</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                  </tbody>
+                </table>
+              </div>
+              <div class="box">
+                <table id="tbody2" class="table sortable" style="text-align: center">
+                  <thead>
+                    <tr>
+                      <th>RUIE</th>
+                      <th>Clientes Impactados</th>
+                      <th>Cidades</th>
+                      <th>Descrição</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+          </div>
+        </section>
+        <section class="main-course">
+          <h1>PRODUTIVIDADE CHAT</h1>
+          <button class="btn btn-primary" onclick="pausachat()" style="background-color: #9e8dff; padding: 10px; border-radius: 10px; cursor: pointer; font-size: 10px;"> USO </button>
+          <div class="course-box">
+            <div class="course">
+
+
+              <table id="tbody1" class="sortable table table-striped table-bordered nowrap" style="text-align: center;">
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Usuário</th>
+                    <th>Login</th>
+                    <th>Logout</th>
+                    <th data-toggle="tooltip" title="Tempo disponível na tela de chat">Tempo Disponível</th>
+                    <th data-toggle="tooltip" title="Tempo indisponível na tela de chat">Tempo Pausa</th>
+                    <th data-toggle="tooltip" title="Usuário dentro da plataforma">Logado</th>
+                    <th data-toggle="tooltip" title="Disponibilidade na tela de chat">Disponível</th>
+                    <th data-toggle="tooltip" title="Disponibilidade na tela de chat">Dif</th>
+
+                  </tr>
+                </thead>
+                <tfoot>
+                  <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </tfoot>
+                <tbody>
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+    </div>
+    <div id="alerta1" style="position: fixed; left: 49%; top: 80% ; width: 50%; display: none;">
+      <div id="mensagem_warning" class="warning" role="alert">
+      </div>
+      <div id="mensagem_up" class="warning" role="alert">
+      </div>
+      <div id="mensagem_espera_voz" class="warning" role="alert">
+      </div>
+  </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.js"
+      integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
+    <script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+
+    <script>
+      $(document).ready(function () {
+        $('#tbody').DataTable({
+          "language": {
+            "sEmptyTable": "Nenhum registro encontrado",
+            "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+            "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+            "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+            "sInfoPostFix": "",
+            "sInfoThousands": ".",
+            "sLengthMenu": "Mostrar _MENU_ resultados por página",
+            "sLoadingRecords": "Carregando...",
+            "sProcessing": "Processando...",
+            "sZeroRecords": "Nenhum registro encontrado",
+            "sSearch": "Pesquisar",
+            "oPaginate": {
+              "sNext": "Próximo",
+              "sPrevious": "Anterior",
+              "sFirst": "Primeiro",
+              "sLast": "Último"
+            },
+            "oAria": {
+              "sSortAscending": ": Ordenar colunas de forma ascendente",
+              "sSortDescending": ": Ordenar colunas de forma descendente"
+            },
+            "select": {
+              "rows": {
+                "_": "Selecionado %d linhas",
+                "0": "Nenhuma linha selecionada",
+                "1": "Selecionado 1 linha"
+              }
+            }
+          }
+        });
+      });
+    </script>
+
+    <script>
+      $(document).ready(function () {
+        var table = $('#tbody1').DataTable({
+          "language": {
+            "sEmptyTable": "Nenhum registro encontrado",
+            "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+            "sInfoPostFix": "",
+            "sInfoThousands": ".",
+            "sLengthMenu": "Mostrar _MENU_ resultados por página",
+            "sLoadingRecords": "Carregando...",
+            "sProcessing": "Processando...",
+            "sZeroRecords": "Nenhum registro encontrado",
+            "sSearch": "Pesquisar",
+            "oPaginate": {
+              "sNext": "Próximo",
+              "sPrevious": "Anterior",
+              "sFirst": "Primeiro",
+              "sLast": "Último"
+            },
+            "oAria": {
+              "sSortAscending": ": Ordenar colunas de forma ascendente",
+              "sSortDescending": ": Ordenar colunas de forma descendente"
+            },
+            "select": {
+              "rows": {
+                "_": "Selecionado %d linhas",
+                "0": "Nenhuma linha selecionada",
+                "1": "Selecionado 1 linha"
+              }
+            }
+          },
+          initComplete: function () {
+            // Adiciona os filtros nas colunas especificadas
+            this.api().columns([4, 5, 6, 7]).every(function () {
+              var column = this;
+              var input = $('<input type="text" placeholder="Filtrar ' + $(column.header()).text() + '" />')
+                .appendTo($(column.footer()).empty())
+                .on('keyup change clear', function () {
+                  if (column.search() !== this.value) {
+                    column.search(this.value).draw();
+                  }
+                });
+            });
+          }
+        });
+      });
+    </script>
+
+    <script>
+      $(document).ready(function () {
+        $('#tbody2').DataTable({
+          "language": {
+            "sEmptyTable": "Nenhum registro encontrado",
+            "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+            "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+            "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+            "sInfoPostFix": "",
+            "sInfoThousands": ".",
+            "sLengthMenu": "Mostrar _MENU_ resultados por página",
+            "sLoadingRecords": "Carregando...",
+            "sProcessing": "Processando...",
+            "sZeroRecords": "Nenhum registro encontrado",
+            "sSearch": "Pesquisar",
+            "oPaginate": {
+              "sNext": "Próximo",
+              "sPrevious": "Anterior",
+              "sFirst": "Primeiro",
+              "sLast": "Último"
+            },
+            "oAria": {
+              "sSortAscending": ": Ordenar colunas de forma ascendente",
+              "sSortDescending": ": Ordenar colunas de forma descendente"
+            },
+            "select": {
+              "rows": {
+                "_": "Selecionado %d linhas",
+                "0": "Nenhuma linha selecionada",
+                "1": "Selecionado 1 linha"
+              }
+            }
+          }
+        });
+      });
+    </script>
+  </body>
+
+  </html>
+</span>

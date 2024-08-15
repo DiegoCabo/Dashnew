@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0">
+    <title>Dashboard Planejamento</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index_novo_home.css') }}">
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="icon" type="image/jpg" href="{{ url_for('static', filename='img/alaresVERDE.png') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
+    <script src="{{ url_for('static', filename='assets/js/color-modes.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/dist/js/bootstrap.bundle.min.js') }}"></script>
+    <link href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="//cdn.datatables.net/select/1.3.3/css/select.dataTables.min.css" rel="stylesheet">
+    <script src='https://cdn.plot.ly/plotly-2.27.0.min.js'></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="container">
+        <nav>
+            <ul>
+                <li><a href="#" class="logo">
+                    <img src="/static/img/pngwing.com.png" alt="" style="border: 3px solid #6b50ff; border-radius: 50%;">
+                    <span class="nav-item" style="color: #6b50ff;">DashBoard</span>
+                </a></li>
+                <li><a href="home">
+                    <i class="fas fa-home"></i>
+                    <span class="nav-item">Home</span>
+                </a></li>
+                <li><a href="painelVoz">
+                    <i class="fas fa-chart-line"></i>
+                    <span class="nav-item">Dash</span>
+                </a></li>
+                <li><a href="">
+                    <i class="fas fa-wallet"></i>
+                    <span class="nav-item">Wallet</span>
+                </a></li>
+                <li><a href="massivas">
+                    <i class="fas fa-circle-exclamation"></i>
+                    <span class="nav-item">Massivas</span>
+                </a></li>
+                <li><a href="clientesUSO">
+                    <i class="fas fa-comment"></i>
+                    <span class="nav-item">Sent. Uso</span>
+                </a></li>
+                <li><a href="encerramentoUSO">
+                    <i class="fas fa-cog"></i>
+                    <span class="nav-item">Enc. Uso</span>
+                </a></li>
+                <li><a href="">
+                    <i class="fas fa-question-circle"></i>
+                    <span class="nav-item">Help</span>
+                </a></li>
+                <li><a href="" class="logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span class="nav-item">Log out</span>
+                </a></li>
+            </ul>
+        </nav>
+
+        <section class="main">
+            <div class="main-top">
+                <h1 style="font-size: 20px; color:#6b50ff;">GESTÃO DE OPERADORES</h1>
+                <i class="fas fa-user-cog"></i>
+            </div>
+
+            <div class="main-skills">
+                <div class="card">
+                    <section class="main-course">
+                        <h3>REAL TIME VOLUMETRIA</h3>
+                        <div id="map" style="height: 80vh;"></div>
+                    </section>
+                </div>
+            </div>
+        </section>
+
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+        <script>
+        // Inicializa o mapa
+const map = L.map('map').setView([-14.2350, -51.9253], 4); // Centro do Brasil
+
+// Adiciona camada de tile
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '© OpenStreetMap'
+}).addTo(map);
+
+// Carrega o arquivo GeoJSON local
+fetch('/static/GEOJSON/malha.json')  // Altere para o caminho correto
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Erro na resposta da rede');
+        }
+        return response.json();
+    })
+    .then(data => {
+        L.geoJSON(data, {
+            style: {
+                color: 'black',
+                weight: 1,
+                opacity: 0.8
+            }
+        }).addTo(map);
+    })
+    .catch(error => {
+        console.error('Erro ao carregar o GeoJSON:', error);
+    });
+
+// Função para consumir a API e contabilizar registros
+function contarRegistrosPorCidade() {
+    fetch('https://script.google.com/macros/s/AKfycbyuAoomdvNb6lEGsnaudRLpBR5DOzp7A3j3gbUFcX9XBylii-wFCMamCOSIrO2Iz-lC/exec')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro ao acessar a API');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const contagemPorCidade = {};
+
+            // Contabiliza registros por cidade
+            data.forEach(item => {
+                const cidade = item.cidade;
+                contagemPorCidade[cidade] = (contagemPorCidade[cidade] || 0) + 1;
+            });
+
+            // Exibe os resultados no mapa
+            exibirResultadosNoMapa(contagemPorCidade);
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+        });
+}
+
+// Função para exibir os resultados no mapa
+function exibirResultadosNoMapa(contagem) {
+    // Coordenadas das cidades (você pode ajustar conforme necessário)
+    const coordenadasCidades = {
+"AGUAI - SP": [-22.2511, -46.8651],
+"AGUAS DA PRATA - SP": [-22.1180, -46.7221],
+"ALFENAS - MG": [-21.4136, -45.9655],
+"ALTEROSA - MG": [-22.2591, -45.6299],
+"ALVARES MACHADO - SP": [-22.0483, -51.4694],
+"AQUIRAZ - CE": [-3.9000, -38.3987],
+"ARARAS - SP": [-22.3594, -47.3808],
+"AREADO - MG": [-21.6099, -45.5412],
+"ASSIS - SP": [-22.6596, -50.4144],
+"ATIBAIA - SP": [-23.3000, -46.5375],
+"BANDEIRANTES - PR": [-23.1861, -50.0122],
+"BERNARDINO DE CAMPOS - SP": [-23.1856, -47.7518],
+"BOTELHOS - MG": [-22.0425, -46.2443],
+"BREJINHO - RN": [-6.1612, -35.5755],
+"CABO VERDE - MG": [-21.8826, -45.0382],
+"CACONDE - SP": [-21.6267, -46.6320],
+"CALDAS - MG": [-21.9804, -45.7030],
+"CAMBARA - PR": [-23.5752, -50.0398],
+"CAMBUQUIRA - MG": [-22.1732, -45.1821],
+"CAMPANHA - MG": [-21.9956, -45.5155],
+"CAMPESTRE - MG": [-21.0806, -45.5224],
+"CAMPOS NOVOS PAULISTA - SP": [-23.0343, -47.3738],
+"CANDIDO MOTA - SP": [-22.0531, -50.3822],
+"CANGUARETAMA - RN": [-6.2707, -35.1300],
+"CANITAR - SP": [-23.0463, -49.4844],
+"CARLOPOLIS - PR": [-23.2367, -49.8979],
+"CASA BRANCA - SP": [-22.4181, -47.2061],
+"CAUCAIA - CE": [-3.7667, -38.6464],
+"CHAVANTES - SP": [-23.0600, -49.1231],
+"CONCEICAO DO RIO VERDE - MG": [-22.0791, -45.3645],
+"CORNELIO PROCOPIO - PR": [-23.1055, -50.6556],
+"DIVINOLANDIA - SP": [-22.3052, -46.6487],
+"DIVISA NOVA - MG": [-21.5038, -44.6893],
+"ELOI MENDES - MG": [-21.6606, -45.6467],
+"ESPIRITO SANTO DO PINHAL - SP": [-22.1887, -46.4173],
+"ESTIVA GERBI - SP": [-22.8697, -46.7866],
+"EUNAPOLIS - BA": [-16.4078, -39.1094],
+"EUSEBIO - CE": [-3.9138, -38.4970],
+"FAMA - MG": [-21.5753, -45.2334],
+"FARTURA - SP": [-23.0333, -47.5237],
+"FORTALEZA - CE": [-3.7172, -38.5433],
+"GOIANINHA - RN": [-5.9697, -35.2057],
+"GUARANESIA - MG": [-21.6005, -45.6266],
+"GUAXUPE - MG": [-21.0505, -46.6768],
+"IBIRAREMA - SP": [-23.2947, -49.0488],
+"IPAUSSU - SP": [-23.2036, -47.2708],
+"IPUIUNA - MG": [-22.3372, -45.5213],
+"ITABERA - SP": [-22.0953, -46.5465],
+"ITAJUBA - MG": [-22.4112, -45.5819],
+"ITAMBARACA - PR": [-23.7079, -49.6619],
+"ITAMONTE - MG": [-22.4000, -44.4219],
+"ITANHANDU - MG": [-22.1161, -44.4086],
+"ITAPETININGA - SP": [-23.6173, -47.5571],
+"ITAPEVA - SP": [-23.7191, -47.0908],
+"ITARARE - SP": [-24.1020, -48.2166],
+"JACAREZINHO - PR": [-23.1744, -49.7678],
+"JESUANIA - MG": [-22.4906, -45.4439],
+"JOAO PESSOA - PB": [-7.1158, -34.8641],
+"LAMBARI - MG": [-22.4483, -45.6394],
+"LIMEIRA - SP": [-22.7417, -47.3860],
+"LUCELIA - SP": [-22.0086, -51.2646],
+"MACHADO - MG": [-21.6378, -45.4394],
+"MARACANAU - CE": [-3.8596, -38.5927],
+"MARILIA - SP": [-22.2169, -50.2412],
+"MARTINOPOLIS - SP": [-23.6094, -47.5293],
+"MOCOCA - SP": [-21.4719, -46.9772],
+"MOGI GUACU - SP": [-22.3663, -46.9324],
+"MOGI MIRIM - SP": [-22.4072, -46.9484],
+"MONTE ALEGRE - RN": [-6.7567, -36.8747],
+"MONTE BELO - MG": [-22.3372, -45.8785],
+"NATAL - RN": [-5.7945, -35.2110],
+"NISIA FLORESTA - RN": [-6.2991, -35.2631],
+"NOVA CRUZ - RN": [-6.4550, -35.5743],
+"OURINHOS - SP": [-23.2019, -49.2059],
+"PACATUBA - CE": [-4.0321, -38.5382],
+"PALMITAL - SP": [-22.0200, -49.0386],
+"PARAGUACU - MG": [-22.5190, -45.2689],
+"PARNAMIRIM - RN": [-5.9469, -35.3083],
+"PASSA QUATRO - MG": [-22.2589, -44.9373],
+"PIRAJU - SP": [-23.4656, -47.1761],
+"PIRAPOZINHO - SP": [-23.0936, -47.5221],
+"PLATINA - SP": [-23.1047, -47.4109],
+"POCOS DE CALDAS - MG": [-21.7868, -46.5544],
+"PORTO SEGURO - BA": [-16.4476, -39.1106],
+"POUSO ALEGRE - MG": [-22.5081, -45.7001],
+"PRESIDENTE PRUDENTE - SP": [-22.1217, -51.3876],
+"RIBEIRAO CLARO - PR": [-23.4296, -50.4226],
+"RINOPOLIS - SP": [-23.1831, -47.3632],
+"RIO CLARO - SP": [-22.4195, -47.5683],
+"SANTA CRUZ CABRALIA - BA": [-16.2049, -39.0662],
+"SANTA CRUZ DO RIO PARDO - SP": [-23.0070, -47.5312],
+"SANTA RITA DE CALDAS - MG": [-22.1656, -45.4884],
+"SANTA RITA DO SAPUCAI - MG": [-22.3139, -45.6215],
+"SANTO ANTONIO - RN": [-5.7297, -35.4038],
+"SANTO ANTONIO DA PLATINA - PR": [-23.1114, -50.0761],
+"SAO BENTO ABADE - MG": [-21.0500, -45.2261],
+"SAO GONCALO DO AMARANTE - RN": [-5.7412, -35.2321],
+"SAO GONCALO DO SAPUCAI - MG": [-22.4091, -44.9050],
+"SAO JOAO DA BOA VISTA - SP": [-22.1956, -46.7851],
+"SAO JOSE DE MIPIBU - RN": [-6.1010, -35.2920],
+"SAO JOSE DO RIO PARDO - SP": [-22.3684, -47.7196],
+"SAO LOURENCO - MG": [-22.1267, -45.0727],
+"SAO PAULO - SP": [-23.5505, -46.6333],
+"SAO PEDRO DA UNIAO - MG": [-22.1836, -46.5061],
+"SAO PEDRO DO TURVO - SP": [-23.0471, -47.1674],
+"SAO SEBASTIAO DA GRAMA - SP": [-22.0000, -46.4583],
+"SERRANIA - MG": [-21.3250, -45.7850],
+"SIQUEIRA CAMPOS - PR": [-23.5319, -49.3915],
+"SOLEDADE DE MINAS - MG": [-22.0494, -45.9398],
+"TAGUAI - SP": [-23.1136, -47.1280],
+"TAPIRATIBA - SP": [-22.4337, -46.5253],
+"TAQUARITUBA - SP": [-23.0661, -47.6993],
+"TATUI - SP": [-23.3522, -47.5000],
+"TIBAU DO SUL - RN": [-6.1942, -35.1162],
+"TIMBURI - SP": [-23.3608, -47.3465],
+"TRES CORACOES - MG": [-21.8595, -45.2176],
+"TRES PONTAS - MG": [-21.4000, -45.5935],
+"TUPA - SP": [-23.1347, -50.5941],
+"VARGEM GRANDE DO SUL - SP": [-22.1534, -46.9737],
+"VARGINHA - MG": [-21.5611, -45.4272],
+"WENCESLAU BRAZ - PR": [-23.4942, -49.6574],
+};
+
+    for (const cidade in contagem) {
+        const coords = coordenadasCidades[cidade];
+        if (coords) {
+            const quantidade = contagem[cidade];
+            let cor;
+
+            // Define a cor com base na quantidade
+            if (quantidade > 500) {
+                cor = 'red';
+            } else if (quantidade >= 200) {
+                cor = 'orange';
+            } else {
+                cor = 'yellow';
+            }
+
+            // Cria um círculo colorido
+            L.circle(coords, {
+                color: cor,
+                fillColor: cor,
+                fillOpacity: 0.5,
+                radius: 5000 // ajuste o raio conforme necessário
+            }).addTo(map)
+            .bindPopup(`${cidade}: ${quantidade} Ligação(ões) para essa cidade!`);
+        }
+    }
+}
+
+// Chama a função ao carregar a página
+document.addEventListener('DOMContentLoaded', contarRegistrosPorCidade);
+    </script>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,570 @@
+<!doctype html>
+
+<html lang="pt-br" data-bs-theme="auto">
+
+<head>
+    <meta charset="utf-8" initial-scale=0.5>
+    <title>Dashboard Planejamento</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='/css/index.css') }}">
+    <script src="{{url_for('static', filename='/js/index.js')}}"></script>
+    <script src='https://cdn.plot.ly/plotly-2.27.0.min.js'></script>
+    <link rel="icon" type="image/jpg" href="{{ url_for('static', filename='/img/alaresVERDE.png') }}">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
+
+    <!--CSS-->
+    
+    <link href="{{url_for('static', filename='/assets/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
+    
+    <!--JS-->
+    <script src="{{url_for('static', filename='/assets/js/color-modes.js')}}"></script>
+    <script src="{{url_for('static', filename='/assets/dist/js/bootstrap.bundle.min.js')}}"></script>
+
+    
+    <!--Tabela-->
+    <link href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="//cdn.datatables.net/select/1.3.3/css/select.dataTables.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div id="barra-lateral" class="col-sm-auto sticky-top">
+                <div id="barra-lateral"
+                    class="d-flex flex-sm-column flex-row flex-nowrap align-items-center sticky-top">
+                    <img src="/static/img/pngwing.com.png"
+                        style="width: 70px; margin-top: 20px; border:4px solid #6b50ff; border-radius: 50%;" alt="">
+                    <ul
+                        class="nav nav-pills nav-flush flex-sm-column flex-row flex-nowrap mb-auto mx-auto text-center align-items-center">
+                        <li class="nav-item">
+                            <a href="home" class="nav-link py-3 px-2" title="" data-bs-toggle="tooltip"
+                                data-bs-placement="right" data-bs-original-title="Home" style="color: #00fa97;">
+                                <i class="bi-house fs-1" title="Cadastra / Atualizar Operadores"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="painelVoz" class="nav-link py-3 px-2" title="" data-bs-toggle="tooltip"
+                                data-bs-placement="right" data-bs-original-title="Dashboard" style="color: #00fa97;">
+                                <i class="bi-speedometer2 fs-1" title="Dashboard"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="massivas" class="nav-link py-3 px-2" title="" data-bs-toggle="tooltip"
+                                data-bs-placement="right" data-bs-original-title="Orders" style="color: #00fa97;">
+                                <i class="bi-table fs-1" title="Massivas"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link py-3 px-2" title="" data-bs-toggle="tooltip"
+                                data-bs-placement="right" data-bs-original-title="Products" style="color: #00fa97;">
+                                <i class="bi-heart fs-1"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="operadores" target="_blank" class="nav-link py-3 px-2" title=""
+                                data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Operadores"
+                                style="color: #00fa97;">
+                                <i class="bi-people fs-1" title="Relatório Operadores"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <li>
+                                <a href="clientesUSO" target="_blank" class="nav-link py-3 px-2" title=""
+                                    data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Sentimento USO"
+                                    style="color: #00fa97;">
+                                    <i title="Sentimento USO"> <img src="/static/img/escala-de-satisfacao.png"
+                                            style="height: 55px ;width: 55px"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="encerramentoUSO" target="_blank" class="nav-link py-3 px-2" title=""
+                                    data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Encerramento USO"
+                                    style="color: #00fa97;">
+                                    <i title="Encerramento USO"> <img src="/static/img/search.png"
+                                            style="height: 55px ;width: 55px"></i>
+                                </a>
+                            </li>
+                    </ul>
+                    <div class="dropdown">
+                        <a href="quadro" target="_blank"
+                            class="d-flex align-items-center justify-content-center p-3 link-dark text-decoration-none dropdown-toggle"
+                            id="dropdownUser3" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi-person-circle h2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div id='geral' class="col-sm p-3 min-vh-110" style="background-color: #2b2b2b;">
+
+                <div id="alertas" style="display: flex; align-items: center; justify-content: center;">
+
+                    <h3>Dashboard Control Desk</h3>
+
+                </div>
+                <div id="100%" style="display: flex; width: 100%; ">
+
+                    <div id="Report1">
+                        <div id="total"><button onclick="updatgeral()" id="b_geral"
+                                style="background: none;">RECEBIDAS</button>
+                            <div id="valor_recebidas"></div>
+                        </div>
+                        <div id="atendidas">ATENDIDAS
+                            <div id="valor_atendidas"></div>
+                        </div>
+                        <div id="pca">PCA (%)
+                            <div id="valor_pca"></div>
+                        </div>
+                        <div id="abandonadas">ABAND.
+                            <div id="valor_aband"></div>
+                        </div>
+                        <div id="tme">TME
+                            <div id="valor_tme"></div>
+                        </div>
+                        <div id="tma">TMA
+                            <div id="valor_tma"></div>
+                        </div>
+                        <div id="espera" style="color: #50c8ff;font-weight: bold">ESPERA
+                            <div id="valor_espera"><button style="background: none; color: rgb(74, 74, 74);"
+                                    onclick="update_filas()"></button></div>
+                        </div>
+                        <div id="chamando" style="color: #00fa97; font-weight: bold">ATIVAS
+                            <div id="valor_chamando"></div>
+                        </div>
+                        <div id="pausados">
+                            <button onclick="chat()"
+                                style="background: none; border: none; color: #6b50ff;">CHAT</button>
+
+                            <div id="valor_chat" style="height:100%;">
+
+                                <img src="/static/img/alaresVERDE.png"
+                                    style="height: 35px ;width: 35px; margin-right: 45px;">
+                                <img src="/static/img/webby.png" style="height: 55px ;width: 100px;">
+                                <div id="valores"
+                                    style="display:flex; width: 100%; text-align: center; margin-left: 10px;">
+                                    <a id="chatTotal" type="text" placeholder="00"
+                                        style="width: 50px; color: #00fa97;"></a>
+                                    <a id="chatTME" type="text" placeholder="00:00:00"
+                                        style="width: 122px;  color: #00fa97;"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="pausados">
+                            <button
+                                style="background: none; border: none; color: #6b50ff;">CHAT - L/D</button>
+
+                            <div id="valor_chat" style="height:100%;">
+
+                                <img src="/static/img/alaresVERDE.png"
+                                    style="height: 35px ;width: 35px; margin-right: 45px;">
+                                <img src="/static/img/webby.png" style="height: 55px ;width: 100px;">
+                                <div id="valores"
+                                    style="display:flex; width: 100%; text-align: center; margin-left: 10px;">
+                                    <a id="chatTotalLogados" type="text" placeholder="00"
+                                        style="width: 50px; color: #00fa97;"></a>/<a id="chatDispo" type="text" placeholder="00"
+                                        style="width: 50px; color: #00fa97;"></a>
+                                    <a id="chatTotalLogados2" type="text" placeholder="00:00:00"
+                                        style="width: 50px;  color: #00fa97;"></a>/<a id="chatDispo2" type="text" placeholder="00"
+                                        style="width: 50px; color: #00fa97;"></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="100%" style="display: flex; width: 100%; ">
+                    <div id="grafico">
+                        <div id="titulo_gráfico"><img src="/static/img/relatorio.png" style="height: 26px ;width: 25px;"
+                                title="Gráfico"> <button id="b_grafico" onclick="updateGrafico()"
+                                style="background: none;"> Gráfico
+                                Recebidas x Pca</button>
+                            <div id="render_grafico">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="operadores_pausado" style="height: 400px;">
+                        <div id="ofensores_tma"> <img src="/static/img/procurar.png" style="width: 30px;"
+                                title="Pausados">
+                            <a href="pesquisa_demandaFULL" target="_blank"> <button id="b_pesquisa"
+                                    style="background: none;">Pesquisa Demanda</button></a><button onclick="demanda()"
+                                style="background: none; border: none; font-size: 15px; margin-left: 5px;"><i
+                                    class="fa-solid fa-rotate" style="color: #00fa97; background: none;"></i>
+                            </button>
+                            <div id='myDiv'></div>
+
+                        </div>
+                    </div>
+                </div>
+                <!--               
+                <div id="100%" style="display: flex; width: 100%; ">
+                    <div id="card1">
+                        <div id="ofensores_tma"> <img src="/static/img/registro-de-tempo.png"
+                                style="height: 26px ;width: 25px;" title="Ofensores">
+                            <button id="b_produtividade" onclick="updatprodutividade()"
+                                style="background: none;">Produtividade Operadores</button> <button id="export-button"
+                                onclick="exportar()" style="background: none;"><i class="fa-solid fa-file-csv"
+                                    style="color: #6b50ff;"></i></button>
+
+                            <div id="tabela" class="sortable">
+                                <table id="example" class="sortable" style="width: 100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>Login</th>
+                                            <th>Operador</th>
+                                            <th>Quantidade</th>
+                                            <th>Ocupado</th>
+                                            <th>TMA</th>
+                                            <th>Duração</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabelaBody" style="color: #00fa97;">
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                -->
+                <div id="100%" style="display: flex; width: 100%; ">
+
+                    <div id="Report1">
+                        <div id="total"><button onclick="updatconsolidsac()" id="b_geral"
+                                style="background: none;">RECEBIDAS - SAC</button>
+                            <div id="total_consolidadoSAC"></div>
+                        </div>
+                        <div id="atendidas">ATENDIDAS
+                            <div id="atendidas_consolidadoSAC"></div>
+                        </div>
+                        <div id="pca">PCA (%)
+                            <div id="pca_consolidadoSAC"></div>
+                        </div>
+                        <div id="abandonadas">ABAND.
+                            <div id="abandonadas_consolidadoSAC"></div>
+                        </div>
+                        <div id="tme">TME
+                            <div id="tme_consolidadoSAC"></div>
+                        </div>
+                        <div id="tma">TMA
+                            <div id="tma_consolidadoSAC"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="100%" style="display: flex; width: 100%; ">
+
+                    <div id="Report1">
+                        <div id="total"><button onclick="updatconsolidhd()" id="b_geral"
+                                style="background: none;">RECEBIDAS - HD</button>
+                            <div id="total_consolidadoHD"></div>
+                        </div>
+
+                        <div id="atendidas">ATENDIDAS
+                            <div id="atendidas_consolidadoHD"></div>
+                        </div>
+                        <div id="pca">PCA (%)
+                            <div id="pca_consolidadoHD"></div>
+                        </div>
+                        <div id="abandonadas">ABAND.
+                            <div id="abandonadas_consolidadoHD"></div>
+                        </div>
+                        <div id="tme">TME
+                            <div id="tme_consolidadoHD"></div>
+                        </div>
+                        <div id="tma">TMA
+                            <div id="tma_consolidadoHD"></div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div id="100%" style="display: flex; width: 100%; ">
+
+                    <div id="Report1">
+                        <div id="total">
+                            <button onclick="validaUSO()" id="b_geral"
+                                style="background: none;">
+                                <img src="/static/img/uso.png" style="width: 100px; margin-top: 5px;" title="uso">
+                            </button>
+                            <div id="imgUSO">
+                                
+                            </div>
+                        </div>
+
+                        <div id="atendidas">
+                            <button onclick="validaZAP()" id="b_geral"
+                            style="background: none;">
+                                <img src="/static/img/whats.png" style="width: 150px; margin-top: 5px;" title="zap">
+                            </button>
+                            <div id="zap"></div>
+                        </div>
+                        <div id="pca">
+                            <img src="/static/img/youtube.png" style="width: 150px; margin-top: 5px;" title="uso">
+                            <div id="yt"></div>
+                        </div>
+                        <div id="abandonadas">
+                            <img src="/static/img/insta.png" style="width: 150px; margin-top: 5px;" title="uso">
+                            <div id=""></div>
+                        </div>
+                        <div id="tme">
+                            <img src="/static/img/micro.png" style="width: 200px; margin-top: 5px;" title="uso">
+                            <div id=""></div>
+                        </div>
+                        <div id="tma">TMA
+                            <div id=""></div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div id="tabela_group1">
+                <div id="tabelalogados">
+                <button onclick="escalados()"
+                    style="background: none; border: none; font-size: 15px; margin-left: 5px;">Escalados /Logados <i
+                        class="fa-solid fa-rotate" style="font-weight: bold; font-size: 15px;color: #00fa97; background: none;"></i>
+                </button>
+
+                <div class="table-container">
+                    <div class="table-responsive">
+                        <table id="tbody" class="table sortable" style="text-align: center">
+                            <thead>
+                            <tr>
+                                <th>Setor</th>
+                                <th>Escalados</th>
+                                <th>Logados</th>
+                                <th>Abd (%)</th>
+                                <th>Atualização</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                      </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+
+                <div id="tabelalogados">
+                    <a href="#" target="_blank"> <button id="b_pesquisa"
+                        style="background: none;">Alertas</button></a><button onclick="alertas()"
+                    style="background: none; border: none; font-size: 15px; margin-left: 5px;"><i
+                        class="fa-solid fa-rotate" style="color: #00fa97; background: none;"></i>
+                </button>
+                <div class="table-container">
+                    <div class="table-responsive">
+                        <table id="tbody2" class="table sortable" style="text-align: center">
+                            <thead>
+                            <tr>
+                                <th>RUIE</th>
+                                <th>Clientes Impactados</th>
+                                <th>Cidades</th>
+                                <th>Descrição</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                      </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+                    <div id="tabelapausasChat">
+                        <div id="alertas" style="display: flex; align-items: center; justify-content: center; margin-top: 10px;">
+                            <button onclick="pausachat()" style="background: none; color: #00fa97;"><h3>Produtividade Uso</h3></button>
+                        </button>
+                        </div>
+                        <div style="width: 100%; display: flex; margin-top: 20px;">
+                            <input type="date" name="datastart" id="data_start" style="margin-left: 10px;">
+                            <input type="date" name="dataend" id="data_end" style="margin-left: 10px;">
+                        </div>
+                        <div class="table-container">
+                            <div class="table-responsive">
+                        <table id="tbody1" class="sortable table table-striped table-bordered nowrap" style="text-align: center;">
+                            <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Usuário</th>
+                                        <th>Login</th>
+                                        <th>Logout</th>
+                                        <th data-toggle="tooltip" title="Tempo disponível na tela de chat">Tempo Disponível</th>
+                                        <th data-toggle="tooltip" title="Tempo indisponível na tela de chat">Tempo Pausa</th>
+                                        <th data-toggle="tooltip" title="Usuário dentro da plataforma">Logado</th>
+                                        <th data-toggle="tooltip" title="Disponibilidade na tela de chat">Disponível</th>
+                                        <th data-toggle="tooltip" title="Disponibilidade na tela de chat">Dif</th>
+
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                      <th></th>
+                                      <th></th>
+                                      <th></th>
+                                      <th></th>
+                                      <th></th>
+                                      <th></th>
+                                      <th></th>
+                                      <th></th>
+                                      <th></th>
+                                    </tr>
+                                  </tfoot>
+                                <tbody>
+        
+                              </tbody>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="alerta1" style="position: fixed; left: 49%; top: 80% ; width: 50%; display: none;">
+                        <div class="alert alert-warning d-flex align-items-center" role="alert">
+                            <!-- <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img"
+                                aria-label="Warning:">-->
+                            <use xlink:href="#exclamation-triangle-fill" />
+                            </svg>
+                            <div id="mensagem">
+                            </div>
+                        </div>
+                    </div>
+
+                            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+                            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+                            <script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>                            <script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+            <script>
+              $(document).ready(function () {
+                $('#tbody').DataTable({
+                  "language": {
+                    "sEmptyTable": "Nenhum registro encontrado",
+                    "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                    "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sInfoThousands": ".",
+                    "sLengthMenu": "Mostrar _MENU_ resultados por página",
+                    "sLoadingRecords": "Carregando...",
+                    "sProcessing": "Processando...",
+                    "sZeroRecords": "Nenhum registro encontrado",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": {
+                      "sNext": "Próximo",
+                      "sPrevious": "Anterior",
+                      "sFirst": "Primeiro",
+                      "sLast": "Último"
+                    },
+                    "oAria": {
+                      "sSortAscending": ": Ordenar colunas de forma ascendente",
+                      "sSortDescending": ": Ordenar colunas de forma descendente"
+                    },
+                    "select": {
+                      "rows": {
+                        "_": "Selecionado %d linhas",
+                        "0": "Nenhuma linha selecionada",
+                        "1": "Selecionado 1 linha"
+                      }
+                    }
+                  }
+                });
+              });
+            </script>
+                <script>
+$(document).ready(function() {
+  var table = $('#tbody1').DataTable({
+    "language": {
+      "sEmptyTable": "Nenhum registro encontrado",
+      "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+      "sInfoPostFix": "",
+      "sInfoThousands": ".",
+      "sLengthMenu": "Mostrar _MENU_ resultados por página",
+      "sLoadingRecords": "Carregando...",
+      "sProcessing": "Processando...",
+      "sZeroRecords": "Nenhum registro encontrado",
+      "sSearch": "Pesquisar",
+      "oPaginate": {
+        "sNext": "Próximo",
+        "sPrevious": "Anterior",
+        "sFirst": "Primeiro",
+        "sLast": "Último"
+      },
+      "oAria": {
+        "sSortAscending": ": Ordenar colunas de forma ascendente",
+        "sSortDescending": ": Ordenar colunas de forma descendente"
+      },
+      "select": {
+        "rows": {
+          "_": "Selecionado %d linhas",
+          "0": "Nenhuma linha selecionada",
+          "1": "Selecionado 1 linha"
+        }
+      }
+    },
+    initComplete: function() {
+      // Adiciona os filtros nas colunas especificadas
+      this.api().columns([4, 5, 6, 7]).every(function() {
+        var column = this;
+        var input = $('<input type="text" placeholder="Filtrar ' + $(column.header()).text() + '" />')
+          .appendTo($(column.footer()).empty())
+          .on('keyup change clear', function() {
+            if (column.search() !== this.value) {
+              column.search(this.value).draw();
+            }
+          });
+      });
+    }
+  });
+});
+                  </script>
+                              <script>
+                                $(document).ready(function () {
+                                  $('#tbody2').DataTable({
+                                    "language": {
+                                      "sEmptyTable": "Nenhum registro encontrado",
+                                      "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                                      "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                                      "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                                      "sInfoPostFix": "",
+                                      "sInfoThousands": ".",
+                                      "sLengthMenu": "Mostrar _MENU_ resultados por página",
+                                      "sLoadingRecords": "Carregando...",
+                                      "sProcessing": "Processando...",
+                                      "sZeroRecords": "Nenhum registro encontrado",
+                                      "sSearch": "Pesquisar",
+                                      "oPaginate": {
+                                        "sNext": "Próximo",
+                                        "sPrevious": "Anterior",
+                                        "sFirst": "Primeiro",
+                                        "sLast": "Último"
+                                      },
+                                      "oAria": {
+                                        "sSortAscending": ": Ordenar colunas de forma ascendente",
+                                        "sSortDescending": ": Ordenar colunas de forma descendente"
+                                      },
+                                      "select": {
+                                        "rows": {
+                                          "_": "Selecionado %d linhas",
+                                          "0": "Nenhuma linha selecionada",
+                                          "1": "Selecionado 1 linha"
+                                        }
+                                      }
+                                    }
+                                  });
+                                });
+                              </script>
+</body>
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+      <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+    </symbol>
+    <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+      <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+    </symbol>
+    <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+      <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+    </symbol>
+  </svg>
+</html>

@@ -1,0 +1,441 @@
+<!doctype html>
+
+<html lang="pt-br" data-bs-theme="auto">
+
+<head>
+    <meta charset="utf-8">
+    <title>Dashboard Planejamento</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='/css/index.css') }}">
+    <script src="{{url_for('static', filename='/js/index.js')}}"></script>
+    <link rel="stylesheet" href="">
+    <link rel="icon" type="image/jpg" href="{{ url_for('static', filename='/img/alaresVERDE.png') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://code.jquery.com/jquery-3.6.1.slim.min.js"
+        integrity="sha256-w8CvhFs7iHNVUtnSP0YKEg00p9Ih13rlL9zGqvLdePA=" crossorigin="anonymous"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+
+<body id="body-pd">
+    <header class="header" id="header">
+        <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
+        <div class="header_img"> <a target="_blank" href="https://alaresinternet.com.br/"><img title="Alares"
+                    src="/static/img/vetor-1.png" alt=""></a> </div>
+    </header>
+    <div class="l-navbar" id="nav-bar">
+        <nav class="nav">
+            <div> <a href="https://alaresinternet.com.br" class="nav_logo"> <i><img src="/static/img/alaresVERDE.png"
+                            style="width: 3%; position: relative; ; left: -1px;; " alt=""> <span class="nav_logo-name"
+                            style="position: relative; left: 10px;">Planejamento</span> </a></i>
+                <div class="nav_list"> <a href="http://192.168.0.29:5000/pagina" class="nav_link active"> <i
+                            class='bx bx-grid-alt nav_icon' title="Dash. Voz"></i> <span class="nav_name">Dashboard
+                            Voz</span> </a> <a href="./uso.html" class="nav_link"> <i
+                            class='bx bx-message-square-detail nav_icon' title="Dash. Uso"></i> <span
+                            class="nav_name">Dashboard USO</span> </a> <a href="./cobraca.html" class="nav_link"> <i
+                            class='bx bx-message-square-detail nav_icon' title="Dash. Cobrança"></i> <span
+                            class="nav_name">Dash.
+                            Cobrança</span> </a> <a href="http://127.0.0.1:5000" class="nav_link"> <i
+                            class='bx bx-bookmark nav_icon' title="Massivas"></i> <span class="nav_name">Massivas</span>
+                    </a> <a href="http://192.168.0.29:5000/operadores" target="_blank" class="nav_link"> <i
+                            class='bx bx-folder nav_icon' title="Produtividade Op."></i> <span
+                            class="nav_name">Produtividade Op.</span> </a> <a
+                        href="https://monitor-callcenter.go.akamai-access.com/acompanhamento" target="_blank"
+                        class="nav_link"> <i class='bx bx-bar-chart-alt-2 nav_icon' title="Monitorar Cidades"></i> <span
+                            class="nav_name">Monitorar Cidades</span> </a> </div>
+            </div> <a href="https://cors-anywhere.herokuapp.com/corsdemo" target="_blank" class="nav_link"> <i
+                    class='bx bx-log-out nav_icon'></i> <span class="nav_name">Desbloquear Rede</span> </a>
+        </nav>
+    </div>
+    <!--Container Main start-->
+
+    <!--CARD HEAD-->
+
+    <div class="jumbotron" style="width: auto; margin-top: 100px;">
+        <div class="row w-100">
+            <div class="col-md-3">
+                <div class="card border-info mx-sm-1 p-3">
+                    <div class="card border-info shadow text-info p-3 my-card"><span class="fa fa-car"
+                            aria-hidden="true"></span></div>
+                    <div class="text-info text-center mt-3">
+                        <h4>Cars</h4>
+                    </div>
+                    <div class="text-info text-center mt-2">
+                        <h1>234</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-success mx-sm-1 p-3">
+                    <div class="card border-success shadow text-success p-3 my-card"><span class="fa fa-eye"
+                            aria-hidden="true"></span></div>
+                    <div class="text-success text-center mt-3">
+                        <h4>Eyes</h4>
+                    </div>
+                    <div class="text-success text-center mt-2">
+                        <h1>9332</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-danger mx-sm-1 p-3">
+                    <div class="card border-danger shadow text-danger p-3 my-card"><span class="fa fa-heart"
+                            aria-hidden="true"></span></div>
+                    <div class="text-danger text-center mt-3">
+                        <h4>Hearts</h4>
+                    </div>
+                    <div class="text-danger text-center mt-2">
+                        <h1>346</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-warning mx-sm-1 p-3">
+                    <div class="card border-warning shadow text-warning p-3 my-card"><span class="fa fa-inbox"
+                            aria-hidden="true"></span></div>
+                    <div class="text-warning text-center mt-3">
+                        <h4>Inbox</h4>
+                    </div>
+                    <div class="text-warning text-center mt-2">
+                        <h1>346</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--CARD HEAD-->
+
+    <div class="height-100">
+        <div class="data1">
+            <form action="/update_geral" method="GET">
+                <input class="datastart" type="date" id="start_date" name="start_date" min="2023-01-01"
+                    max="2023-12-31">
+                <input class="dataend" type="date" id="end_date" name="end_date" min="2023-01-01" max="2023-12-31">
+                <button><i class="fa-solid fa-rotate" title="Update Geral"></i></button>
+            </form>
+        </div>
+
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-6">
+
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border-info">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <form action="/Geral" method="get">
+                                <button class="update_ret_card">
+                                    Geral
+                                </button>
+                            </form>
+                            <div>
+                                <p class="mb-0 text-secondary">Total</p>
+                                <h4 id="total_geral">{{vetor_geral[48]['Total']}}</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-bloody text-white ms-auto"><i
+                                    class="fa-solid fa-phone-flip" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border-danger">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">Atendidas</p>
+                                <h4 id="atendidas_geral">{{vetor_geral[48]['atendidas']}}</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-bloody text-white ms-auto"><i
+                                    class="fa-solid fa-phone-volume" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border-success">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">% Atendidas</p>
+                                <h4 id="pca_geral">{{vetor_geral[48]['Percent']}}</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-ohhappiness text-white ms-auto">
+                                <i id=change class="fa fa-bar-chart" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border-warning">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">Aband.</p>
+                                <h4 id="abandonadas_geral">{{vetor_geral[48]['Natendidas']}}</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-blooker text-white ms-auto"><i
+                                    class="fa-solid fa-phone-slash" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border border-primary">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">TME</p>
+                                <h4 id="tme_geral">{{vetor_geral[48]['tme']}}</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-blooker text-white ms-auto"><i
+                                    class="fa-solid fa-clock" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border border-secondary">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">TMA</p>
+                                <h4 id="tma_geral">{{vetor_geral[48]['tma']}}</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-blooker text-white ms-auto"><i
+                                    class="fa fa-users" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!---->
+
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border-info">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <button class="update_ret_card " onclick="updatconsolidsac()">
+                                SAC
+                            </button>
+                            <div>
+                                <p class="mb-0 text-secondary">Total</p>
+                                <h4 id="total_consolidadoSAC">{{vetor_geral_SAC[48]['TotalSAC']}}</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-bloody text-white ms-auto"><i
+                                    class="fa-solid fa-phone-flip" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border-danger">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">Atendidas</p>
+                                <h4 id="atendidas_consolidadoSAC">{{vetor_geral_SAC[48]['atendidasSAC']}}</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-bloody text-white ms-auto"><i
+                                    class="fa-solid fa-phone-volume" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border-success">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">% Atendidas</p>
+                                <h4 id="pca_consolidadoSAC">{{vetor_geral_SAC[48]['PercentSAC']}}</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-ohhappiness text-white ms-auto">
+                                <i id=change class="fa fa-bar-chart" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border-warning">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">Aband.</p>
+                                <h4 id="abandonadas_consolidadoSAC">{{vetor_geral_SAC[48]['NatendidasSAC']}}</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-blooker text-white ms-auto"><i
+                                    class="fa-solid fa-phone-slash" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border border-primary">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">TME</p>
+                                <h4 id="tme_consolidadoSAC">{{vetor_geral_SAC[48]['tmeSAC']}}</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-blooker text-white ms-auto"><i
+                                    class="fa-solid fa-clock" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border border-secondary">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">TMA</p>
+                                <h4 id="tma_consolidadoSAC">{{vetor_geral_SAC[48]['tmaSAC']}}</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-blooker text-white ms-auto"><i
+                                    class="fa fa-users" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!---->
+
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border-info">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <button class="update_ret_card " onclick="updatconsolidhd()">
+                                HD
+                            </button>
+                            <div>
+                                <p class="mb-0 text-secondary">Total</p>
+                                <h4 id="total_consolidadoHD">{{vetor_geral_HD[48]['TotalHD']}}</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-bloody text-white ms-auto"><i
+                                    class="fa-solid fa-phone-flip" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border-danger">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">Atendidas</p>
+                                <h4 id="atendidas_consolidadoHD">{{vetor_geral_HD[48]['atendidasHD']}}</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-bloody text-white ms-auto"><i
+                                    class="fa-solid fa-phone-volume" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border-success">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">% Atendidas</p>
+                                <h4 id="pca_consolidadoHD">{{vetor_geral_HD[48]['PercentHD']}}</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-ohhappiness text-white ms-auto">
+                                <i id=change class="fa fa-bar-chart" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border-warning">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">Aband.</p>
+                                <h4 id="abandonadas_consolidadoHD">{{vetor_geral_HD[48]['NatendidasHD']}}</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-blooker text-white ms-auto"><i
+                                    class="fa-solid fa-phone-slash" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border border-primary">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">TME</p>
+                                <h4 id="tme_consolidadoHD">{{vetor_geral_HD[48]['tmeHD']}}</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-blooker text-white ms-auto"><i
+                                    class="fa-solid fa-clock" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-3 border border-secondary">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">TMA</p>
+                                <h4 id="tma_consolidadoHD">{{vetor_geral_HD[48]['tmaHD']}}</h4>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-blooker text-white ms-auto"><i
+                                    class="fa fa-users" style="color: #00fa97;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="consolidado_SAC" style="width: 100%; height: 400px;">
+            <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+            <script>
+                // Código JavaScript para renderizar o gráfico
+                var graficoSAC = {{ graph1JSON | safe}}
+                Plotly.plot('consolidado_SAC', graficoSAC, {});
+            </script>
+
+        </div>
+    </div>
+    <div id="consolidado_HD" style="width: 100%; height: 400px;">
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <script>
+            // Código JavaScript para renderizar o gráfico
+            var graficoHD = {{ graphHDJSON | safe}}
+            Plotly.plot('consolidado_HD', graficoHD, {});
+        </script>
+    </div>
+
+    <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

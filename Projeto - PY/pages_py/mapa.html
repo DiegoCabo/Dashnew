@@ -84,9 +84,9 @@
 const map = L.map('map').setView([-14.2350, -51.9253], 4); // Centro do Brasil
 
 // Adiciona camada de tile
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
     maxZoom: 19,
-    attribution: '© OpenStreetMap'
+    attribution: '© OpenStreetMap, © CartoDB'
 }).addTo(map);
 
 // Carrega o arquivo GeoJSON local
@@ -100,7 +100,7 @@ fetch('/static/GEOJSON/malha.json')  // Altere para o caminho correto
     .then(data => {
         L.geoJSON(data, {
             style: {
-                color: 'black',
+                color: '#6b50ff',
                 weight: 1,
                 opacity: 0.8
             }
@@ -263,35 +263,47 @@ function exibirResultadosNoMapa(contagem) {
 "WENCESLAU BRAZ - PR": [-23.4942, -49.6574],
 };
 
-    for (const cidade in contagem) {
+for (const cidade in contagem) {
         const coords = coordenadasCidades[cidade];
         if (coords) {
             const quantidade = contagem[cidade];
-            let cor;
 
-            // Define a cor com base na quantidade
-            if (quantidade > 500) {
-                cor = 'red';
-            } else if (quantidade >= 200) {
-                cor = 'orange';
-            } else {
-                cor = 'yellow';
+            const hora_sistema = new Date().getHours();
+
+            if (hora_sistema >= 8 && hora_sistema < 9) {
+                iconUrl = quantidade > 150 ? '/static/img/xx3qZCRoRt_red.gif' : (quantidade >= 100 ? '/static/img/xx3qZCRoRt_orange.gif' : '/static/img/xx3qZCRoRt_yellow.gif');
+            } else if (hora_sistema >= 10 && hora_sistema < 12) {
+                iconUrl = quantidade > 500 ? '/static/img/xx3qZCRoRt_red.gif' : (quantidade >= 200 ? '/static/img/xx3qZCRoRt_orange.gif' : '/static/img/xx3qZCRoRt_yellow.gif');
+            } else if (hora_sistema >= 12 && hora_sistema < 16) {
+                iconUrl = quantidade > 700 ? '/static/img/xx3qZCRoRt_red.gif' : (quantidade >= 500 ? '/static/img/xx3qZCRoRt_orange.gif' : '/static/img/xx3qZCRoRt_yellow.gif');
+            } else if (hora_sistema >= 16) {
+                iconUrl = quantidade > 1000 ? '/static/img/xx3qZCRoRt_red.gif' : (quantidade >= 800 ? '/static/img/xx3qZCRoRt_orange.gif' : '/static/img/xx3qZCRoRt_yellow.gif');
             }
 
-            // Cria um círculo colorido
-            L.circle(coords, {
-                color: cor,
-                fillColor: cor,
-                fillOpacity: 0.5,
-                radius: 5000 // ajuste o raio conforme necessário
-            }).addTo(map)
-            .bindPopup(`${cidade}: ${quantidade} Ligação(ões) para essa cidade!`);
+// Agora você pode usar a variável iconUrl após as condições
+            // Cria um ícone a partir da imagem
+            const customIcon = L.icon({
+                iconUrl: iconUrl,
+                iconSize: [50, 50], // Ajuste o tamanho do ícone conforme necessário
+                iconAnchor: [15, 30], // Ponto do ícone que corresponde à localização do marcador
+                popupAnchor: [0, -30] // Ponto do popup que corresponde à localização do marcador
+            });
+
+            // Cria um marcador com o ícone personalizado
+            L.marker(coords, { icon: customIcon })
+                .addTo(map)
+                .bindTooltip(`${cidade}: ${quantidade} Ligação(ões) para essa cidade!`, {
+                    permanent: false,
+                    offset: [0, 20]
+                });
         }
     }
 }
 
 // Chama a função ao carregar a página
 document.addEventListener('DOMContentLoaded', contarRegistrosPorCidade);
+setInterval(contarRegistrosPorCidade, 1200000)
+
     </script>
     </div>
 </body>

@@ -142,6 +142,7 @@ async function fazPESQUISA() {
   };
   const layout1 = {
     height: 340,
+    width:540,
     title: "Bloqueios",
     colorway: ["#7B68EE"],
     //plot_bgcolor: "#272727",
@@ -1175,70 +1176,131 @@ function showAlert(valor) {
 
 function showAlert1(valor) {
   var alertDiv = document.getElementById("alerta1");
-  alertDiv.style.display = "block";
-
   var messageDiv = document.getElementById("mensagem_up");
+  
+  // Exibir o alerta
   alertDiv.style.display = "block";
 
   // Cria a mensagem com a imagem
-  var message = `Atenção! ao PCA ${valor} Valor está subindo! <img src="/static/img/Animation - 1723321375236.gif" alt="" width="45px" height="45px">`;
+  var message = `Atenção! O PCA ${valor} está subindo! <img src="/static/img/Animation - 1723321375236.gif" alt="" width="45px" height="45px">`;
   messageDiv.innerHTML = message;
 
-  // Ocultar o alerta após 5 segundos
+  // Ocultar o alerta após 20 segundos
   setTimeout(function () {
     alertDiv.style.display = "none";
   }, 20000);
 }
 
-function showAlert3() {
+function showAlert3(valor) {
   var alertDiv = document.getElementById("alerta1");
-  alertDiv.style.display = "block";
-
   var messageDiv = document.getElementById("mensagem_espera_voz");
+  
+  // Exibir o alerta
   alertDiv.style.display = "block";
 
   // Cria a mensagem com a imagem
-  var message = `Atenção ao tamanho da <h4>FILA NO VOZ</h4>, valor está subindo! <img src="/static/img/Animation - 1723321581006.gif" alt="" width="45px" height="45px">`;
+  var message = `Atenção ao tamanho da <h4>FILA NO VOZ</h4>, o valor está subindo! <img src="/static/img/Animation - 1723321581006.gif" alt="" width="45px" height="45px">`;
   messageDiv.innerHTML = message;
 
-  // Ocultar o alerta após 5 segundos
+  // Ocultar o alerta após 20 segundos
   setTimeout(function () {
     alertDiv.style.display = "none";
   }, 20000);
 }
 
+function showAlert4(valor) {
+  var alertDiv = document.getElementById("alerta1");
+  var messageDiv = document.getElementById("mensagem_espera_chat");
+  
+  // Exibir o alerta
+  alertDiv.style.display = "block";
+
+  // Cria a mensagem com a imagem
+  var message = `Atenção ao tamanho da <h4>FILA NO CHAT</h4>, o valor está subindo! <img src="/static/img/Animation - 1723321581006.gif" alt="" width="45px" height="45px">`;
+  messageDiv.innerHTML = message;
+
+  // Ocultar o alerta após 20 segundos
+  setTimeout(function () {
+    alertDiv.style.display = "none";
+  }, 20000);
+}
+
+let valorAnteriorPca = null;
+let valorAnteriorEsperaVoz = null;
+let valorAnteriorChat = null;
 
 function monitorarVariavel() {
-  // Obter o valor da variável
-  var valorPca = document.getElementById("valor_pca").textContent;
-  var valorEspera_voz = document.getElementById("valor_espera").textContent;
-  var valorEspera_chat = document.getElementById("chatTotal").textContent;
+  // Obter o valor atual das variáveis
+  const valorPca = document.getElementById("valor_pca").textContent;
+  const valorEsperaVoz = document.getElementById("valor_espera").textContent;
+  const valorChat = document.getElementById("chatTotal").textContent;
 
-  // Obter o vetor do Local Storage
-  var vetorPca = JSON.parse(localStorage.getItem("valor_pca"));
-  var vetorEspera_voz = JSON.parse(localStorage.getItem("espera_voz"));
-  var vetorEspera_chat = JSON.parse(localStorage.getItem("espera_chat"));
-  // Adicionar o novo valor ao vetor
-  vetorPca.push(valorPca);
-  vetorEspera_voz.push(valorEspera_voz);
-  vetorEspera_chat.push(valorEspera_chat);
-  // Atualizar o vetor no Local Storage
-  localStorage.setItem("valor_pca", JSON.stringify(vetorPca));
-  localStorage.setItem("espera_voz", JSON.stringify(vetorEspera_voz));
-  localStorage.setItem("espera_chat", JSON.stringify(vetorEspera_chat));
-
-  var mediaMovel =
-    (parseFloat(vetorPca[vetorPca.length]) +
-      parseFloat(vetorPca[vetorPca.length - 1])+parseFloat(vetorPca[vetorPca.length - 2])) /
-    3;
-  var valorMaisRecente = parseFloat(vetorPca[vetorPca.length]);
-  if (mediaMovel < valorMaisRecente) {
-    showAlert(mediaMovel);
-  } else {
-    showAlert1(valorPca);
+  // Verificar se há mudanças e atualizar se necessário
+  if (valorPca !== valorAnteriorPca) {
+    valorAnteriorPca = valorPca; // Atualiza o valor anterior
+    atualizarLocalStorage("valor_pca", valorPca);
   }
-  if (parseInt(vetorEspera_voz[vetorEspera_voz.length])>=50){
-    showAlert3()
+
+  if (valorEsperaVoz !== valorAnteriorEsperaVoz) {
+    valorAnteriorEsperaVoz = valorEsperaVoz; // Atualiza o valor anterior
+    atualizarLocalStorage("espera_voz", valorEsperaVoz);
+  }
+
+  if (valorChat !== valorAnteriorChat) {
+    valorAnteriorChat = valorChat; // Atualiza o valor anterior
+    atualizarLocalStorage("espera_chat", valorChat);
+  }
+
+  calcularMediaMovel();
+}
+
+function atualizarLocalStorage(chave, valor) {
+  // Obter o vetor do Local Storage
+  const vetor = JSON.parse(localStorage.getItem(chave)) || []; // Inicia um vetor vazio se for null
+  vetor.push(valor); // Adiciona o novo valor ao vetor
+  // Atualizar o vetor no Local Storage
+  localStorage.setItem(chave, JSON.stringify(vetor));
+}
+
+function calcularMediaMovel() {
+  const vetorPca = JSON.parse(localStorage.getItem("valor_pca")) || [];
+  if (vetorPca.length < 3) return; // Forma a média se houver pelo menos 3 valores
+
+  const mediaMovel =
+    (parseFloat(vetorPca[vetorPca.length - 1]) +
+     parseFloat(vetorPca[vetorPca.length - 2]) +
+     parseFloat(vetorPca[vetorPca.length - 3])) / 3;
+
+  const valorMaisRecente = parseFloat(vetorPca[vetorPca.length - 1]);
+  if (mediaMovel < valorMaisRecente) {
+    showAlert(valorMaisRecente);
+  } else {
+    showAlert1(valorMaisRecente);
+  }
+
+  const vetorEsperaVoz = JSON.parse(localStorage.getItem("espera_voz")) || [];
+  if (parseInt(vetorEsperaVoz[vetorEsperaVoz.length - 1]) >= 50) {
+    showAlert3();
+  }
+
+  const vetorChat = JSON.parse(localStorage.getItem("espera_chat")) || [];
+  if (parseInt(vetorChat[vetorChat.length - 1]) >= 50) {
+    showAlert4();
   }
 }
+
+// Criando um Mutação Observer
+const observer = new MutationObserver(monitorarVariavel);
+
+// Configurações do observer para observar mudanças de texto
+const config = {
+  childList: true,
+  subtree: true,
+  characterData: true,
+};
+
+// Observando os elementos desejados
+observer.observe(document.getElementById("valor_pca"), config);
+observer.observe(document.getElementById("valor_espera"), config);
+observer.observe(document.getElementById("chatTotal"), config);
 

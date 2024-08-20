@@ -1590,7 +1590,7 @@ def logados_escalados():
         password="klw$$$40"
     )
     cursor = conn.cursor()
-    query = """SELECT
+    query = """    SELECT
     e.setor,
     COUNT(e.evolux) AS escalados,
     COUNT(l.agent_login) AS logados,
@@ -1604,9 +1604,12 @@ FROM
     ) l
     ON replace(e.evolux, ' ', '') = l.agent_login
 WHERE
-    e.hora_2 NOT IN ('ANJO', 'BH', 'CF', 'FÉRIAS', 'INSS', 'LM', 'TRANSF.', 'ANAL. VT', 'DESL', 'DSR', 'PROMOVIDO')
+    CASE
+        WHEN e.hora_2 IN ('ANJO', 'BH', 'CF', 'FÉRIAS', 'INSS', 'LM', 'TRANSF.', 'ANAL. VT', 'DESL', 'DSR', 'PROMOVIDO', 'A.VT', 'CHAT', 'VOZ', 'FERIAS','RETENÇÃO', 'ANAL .VT')
+        THEN NULL
+        ELSE e.hora_2::TIME
+    END <= CURRENT_TIME
     AND e.data::DATE = CURRENT_DATE
-    AND e.hora_2::TIME <= CURRENT_TIME
 GROUP BY
     e.setor, e.data_processamento"""
     cursor.execute(query)

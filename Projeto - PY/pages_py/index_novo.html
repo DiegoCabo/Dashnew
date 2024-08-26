@@ -14,10 +14,10 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src='https://cdn.plot.ly/plotly-2.27.0.min.js'></script>
     <script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
     <!--CSS-->
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
 
     <!--JS-->
@@ -28,6 +28,7 @@
     <!--Tabela-->
     <link href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" rel="stylesheet">
     <link href="//cdn.datatables.net/select/1.3.3/css/select.dataTables.min.css" rel="stylesheet">
+    
   </head>
 
   <body>
@@ -146,7 +147,7 @@
 
             <div class="card">
               <img src="/static/img/customer-service2.png" alt="" srcset="" style="width: 35px; height: 35px;">
-              <h3>ATENDIMENTO VOZ</h3>
+              <h3>ATEND. VOZ</h3>
               <h3 id="valor_chamando">0</h3>
 
             </div>
@@ -209,7 +210,7 @@
             <div class="course">
               <div class="box">
                 <table id="tbody" class="table sortable" style="text-align: center">
-                  <thead>
+                  <thead style="font-size: 12px;">
                     <tr>
                       <th>Setor</th>
                       <th>Escalados</th>
@@ -218,22 +219,21 @@
                       <th>Atualização</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody style="font-size: 12px;">
 
                   </tbody>
                 </table>
               </div>
               <div class="box">
                 <table id="tbody2" class="table sortable" style="text-align: center">
-                  <thead>
+                  <thead style="font-size: 12px;">
                     <tr>
                       <th>RUIE</th>
                       <th>Clientes Impactados</th>
                       <th>Cidades</th>
-                      <th>Descrição</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody style="font-size: 12px;">
 
                   </tbody>
                 </table>
@@ -250,7 +250,7 @@
 
 
               <table id="tbody1" class="sortable table table-striped table-bordered nowrap" style="text-align: center;">
-                <thead>
+                <thead style="font-size: 12px;">
                   <tr>
                     <th>Data</th>
                     <th>Usuário</th>
@@ -277,7 +277,7 @@
                     <th></th>
                   </tr>
                 </tfoot>
-                <tbody>
+                <tbody style="font-size: 12px;">
 
                 </tbody>
               </table>
@@ -285,15 +285,7 @@
           </div>
         </section>
     </div>
-    <div id="alerta1" style="position: fixed; left: 49%; top: 80% ; width: 50%; display: none;">
-      <div id="mensagem_warning" class="warning" role="alert">
-      </div>
-      <div id="mensagem_up" class="warning" role="alert">
-      </div>
-      <div id="mensagem_espera_voz" class="warning" role="alert">
-      </div>
-      <div id="mensagem_espera_chat" class="warning" role="alert">
-      </div>
+
   </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
@@ -423,6 +415,148 @@
         });
       });
     </script>
+
+<!--=====================================================================-->
+<script>
+  const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 9000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer)
+    toast.addEventListener('mouseleave', Swal.resumeTimer)
+  }
+})
+
+function showAlert(valor) {
+  Toast.fire({
+    icon: 'success',
+    title: `Valor subiu para ${valor}`
+  })
+}
+
+function showAlert1(valor) {
+  Toast.fire({
+    icon: 'info',
+    title: `Valor estava em ${valor}`
+  })
+}
+
+function showAlert3() {
+  Toast.fire({
+    icon: 'warning',
+    title: 'Atenção ao tamanho da FILA NO VOZ, o valor está subindo!',
+    html: '<img src="/static/img/Animation - 1723321581006.gif" alt="" width="45px" height="45px">'
+  })
+}
+
+function showAlert4() {
+  Toast.fire({
+    icon: 'warning',
+    title: 'Atenção ao tamanho da FILA NO CHAT, o valor está subindo!',
+    html: '<img src="/static/img/Animation - 1723321581006.gif" alt="" width="45px" height="45px">'
+  })
+}
+
+let valorAnteriorPca = null;
+let valorAnteriorEsperaVoz = null;
+let valorAnteriorChat = null;
+
+function monitorarVariavelPca() {
+  // Obter o valor atual da variável PCA
+  const valorPca = document.getElementById("valor_pca").textContent;
+
+  // Verificar se há mudanças e atualizar se necessário
+  if (valorPca !== valorAnteriorPca) {
+    valorAnteriorPca = valorPca; // Atualiza o valor anterior
+    atualizarLocalStorage("valor_pca", valorPca);
+  }
+}
+
+function monitorarVariavelEsperaVoz() {
+  // Obter o valor atual da variável Espera Voz
+  const valorEsperaVoz = document.getElementById("valor_espera").textContent;
+
+  // Verificar se há mudanças e atualizar se necessário
+  if (valorEsperaVoz !== valorAnteriorEsperaVoz) {
+    valorAnteriorEsperaVoz = valorEsperaVoz; // Atualiza o valor anterior
+    atualizarLocalStorage("espera_voz", valorEsperaVoz);
+  }
+}
+
+function monitorarVariavelChat() {
+  // Obter o valor atual da variável Chat
+  const valorChat = document.getElementById("chatTotal").textContent;
+
+  // Verificar se há mudanças e atualizar se necessário
+  if (valorChat !== valorAnteriorChat) {
+    valorAnteriorChat = valorChat; // Atualiza o valor anterior
+    atualizarLocalStorage("espera_chat", valorChat);
+  }
+}
+
+function monitorarVariaveis() {
+  monitorarVariavelPca();
+  monitorarVariavelEsperaVoz();
+  monitorarVariavelChat();
+  calcularMediaMovel();
+}
+
+function atualizarLocalStorage(chave, valor) {
+  // Obter o vetor do Local Storage
+  const vetor = JSON.parse(localStorage.getItem(chave)) || []; // Inicia um vetor vazio se for null
+  vetor.push(valor); // Adiciona o novo valor ao vetor
+  // Atualizar o vetor no Local Storage
+  localStorage.setItem(chave, JSON.stringify(vetor));
+}
+
+function calcularMediaMovel() {
+  const vetorPca = JSON.parse(localStorage.getItem("valor_pca")) || [];
+
+  const mediaMovel =
+    (parseFloat(vetorPca[vetorPca.length - 1]) +
+     parseFloat(vetorPca[vetorPca.length - 2]) +
+     parseFloat(vetorPca[vetorPca.length - 3])) / 3;
+
+  const valorMaisRecente = parseFloat(vetorPca[vetorPca.length - 1]);
+  if (mediaMovel < valorMaisRecente) {
+    showAlert(valorMaisRecente);
+  } else {
+    showAlert1(valorMaisRecente);
+  }
+}
+
+function filavoz() {
+  const vetorEsperaVoz = JSON.parse(localStorage.getItem("espera_voz")) || [];
+  if (parseInt(vetorEsperaVoz[vetorEsperaVoz.length - 1]) >= 40) {
+    showAlert3();
+  }
+}
+function filachat() {
+  const vetorChat = JSON.parse(localStorage.getItem("espera_chat")) || [];
+  if (parseInt(vetorChat[vetorChat.length - 1]) >= 40) {
+    showAlert4();
+  }
+}
+
+// Criando um Mutação Observer
+const observer = new MutationObserver(monitorarVariavel);
+
+// Configurações do observer para observar mudanças de texto
+const config = {
+  childList: true,
+  subtree: true,
+  characterData: true,
+};
+
+// Observando os elementos desejados
+observer.observe(document.getElementById("valor_pca"), config);
+observer.observe(document.getElementById("valor_espera"), config);
+observer.observe(document.getElementById("chatTotal"), config);
+</script>
+
   </body>
 
   </html>

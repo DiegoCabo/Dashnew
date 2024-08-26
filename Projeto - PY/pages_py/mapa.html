@@ -72,6 +72,7 @@
                 <div class="card">
                     <section class="main-course">
                         <h3>REAL TIME VOLUMETRIA</h3>
+                        <p id="update"></p>
                         <div id="map" style="height: 80vh;"></div>
                     </section>
                 </div>
@@ -269,6 +270,15 @@ for (const cidade in contagem) {
             const quantidade = contagem[cidade];
 
             const hora_sistema = new Date().getHours();
+            const hoje = new Date();
+            const dia = String(hoje.getDate()).padStart(2, '0');
+            const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+            const ano = hoje.getFullYear();
+            const hora = hoje.getHours();
+            const minutos = hoje.getMinutes();
+
+            const dataFormatada = `${dia}/${mes}/${ano} - ${hora}:${minutos}`; 
+            document.getElementById('update').innerHTML = dataFormatada ;
 
             if (hora_sistema >= 8 && hora_sistema < 9) {
                 iconUrl = quantidade > 150 ? '/static/img/xx3qZCRoRt_red.gif' : (quantidade >= 100 ? '/static/img/xx3qZCRoRt_orange.gif' : '/static/img/xx3qZCRoRt_yellow.gif');
@@ -288,7 +298,7 @@ for (const cidade in contagem) {
                 iconAnchor: [15, 30], // Ponto do ícone que corresponde à localização do marcador
                 popupAnchor: [0, -30] // Ponto do popup que corresponde à localização do marcador
             });
-
+            
             // Cria um marcador com o ícone personalizado
             L.marker(coords, { icon: customIcon })
                 .addTo(map)

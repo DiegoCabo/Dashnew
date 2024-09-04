@@ -1244,6 +1244,37 @@ def atualizar():
     return render_template('home_novo.html')
 
 
+@app.route('/update-agent/<int:agent_id>', methods=['PUT'])
+def update_agent(agent_id):
+    # Recebe os dados do corpo da requisição
+    data = request.json
+
+    nome_operador = data.get('name')
+    login_operador = data.get('login')
+    fila_operador = data.get('queues')
+
+    url = f"https://grupo-conexao.evolux.io/api/v1/agents/{agent_id}"
+
+    payload = json.dumps({
+        "name": nome_operador,
+        "login": login_operador,
+        "queues": fila_operador
+    })
+
+    headers = {
+        'token': '91440272-3f9c-45b3-8177-b2dd49c49920',
+        'Content-Type': 'application/json'
+    }
+
+    response = requests.put(url, headers=headers, data=payload)
+
+    # Retorna a resposta do servidor da API
+    if response.status_code == 200:
+        return jsonify({"message": "Agent updated successfully", "agent_id": agent_id}), 200
+    else:
+        return jsonify({"error": "Failed to update agent", "details": response.json()}), response.status_code
+
+
 """----------------------------------------"""
 @app.route('/caminhos', methods=['GET'])
 

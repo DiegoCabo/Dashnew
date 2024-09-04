@@ -1166,39 +1166,3 @@ if (!localStorage.getItem("valor_pca")) {
   localStorage.setItem("valor_pca", "[]");
 
 }
-
-async function fazGet_quadro() {
-  
-  const response = await fetch('/quadro');
-  const data = await response.json();
-
-  const table = $('#tbody').DataTable();
-  table.clear();
-
-  for (const key in data.nome) {
-    const rowData = [
-      data.id[key],
-      data.nome[key],
-      data.login[key],
-      data.grupo[key],
-      data.tipo[key],
-      `<input type="checkbox" class="row-checkbox" data-id="${data.id[key]}">`, // Checkbox com data-id
-    ];
-     
-    table.row.add(rowData);
-  }
-
-  table.draw(); // Redesenha a tabela após adicionar as linhas
-  
-// Adiciona o listener para o checkbox "Selecionar Todos"
-document.getElementById('select-all').addEventListener('change', function() {
-    const checkboxes = document.querySelectorAll('.row-checkbox');
-    checkboxes.forEach(checkbox => {
-        checkbox.checked = this.checked;
-    });
-});
-}
-
-function carregar_quadro() {
-  fazGet_quadro();
-}

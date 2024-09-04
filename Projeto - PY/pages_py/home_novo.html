@@ -6,7 +6,7 @@
     <meta name="viewport" content="initial-scale=0.5">
     <title>Dashboard Planejamento</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='/css/index_novo_home.css') }}">
-    <script src="{{ url_for('static', filename='/js/index.js') }}"></script>
+    <script src="{{ url_for('static', filename='/js/quadro.js') }}"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <link rel="icon" type="image/jpg" href="{{ url_for('static', filename='/img/alaresVERDE.png') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -122,19 +122,19 @@
                 <h3>ATUALIZAR FILAS EM LOTE</h3>
                 <div style="display: flex;">
                       <div class="col-12" style="display: flex;">
-                        <button type="submit" class="btn btn" onclick="carregarQuadro()" style="background-color:#555cfb; border: solid 4px #04fb94; color: #fff;">Carregar Quadro</button>
+                        <button type="submit" class="btn btn" onclick="carregarQuadro()" style="background-color:#555cfb; border: solid 4px #04fb94; color: #fff">Carregar Quadro</button>
                     </div>
                     <div class="col-12" style="display: flex; margin-left: 10px;">
-                      <button type="submit" class="btn btn" onclick="reset_geral()" style="background-color:#555cfb; border: solid 4px #04fb94; color: #fff;">Reset CHAT</button>
+                      <button type="submit" class="btn btn" onclick="atualizarQuadro_chat()" style="background-color:#555cfb; border: solid 4px #04fb94; color: #fff;">Reset CHAT</button>
                   </div>
                   <div class="col-12" style="display: flex; margin-left: 10px;">
-                    <button type="submit" class="btn btn" onclick="carregar_quadro()" style="background-color:#555cfb; border: solid 4px #04fb94; color: #fff;">Reset VOZ</button>
+                    <button type="submit" class="btn btn" style="background-color:#555cfb; border: solid 4px #04fb94; color: #fff;">Reset Retenção</button>
                 </div>
                 <div class="col-12" style="display: flex; margin-left: 10px;">
-                  <button type="submit" class="btn btn" onclick="carregar_quadro()" style="background-color:#555cfb; border: solid 4px #04fb94; color: #fff;">Reset MULTISKILL</button>
+                  <button type="submit" class="btn btn" onclick="atualizarQuadro()" style="background-color:#555cfb; border: solid 4px #04fb94; color: #fff;">Reset MULTISKILL</button>
               </div>
                 <div class="col-12" style="display: flex; margin-left: 10px;">
-                  <button type="submit" class="btn btn" onclick="reset_geral()" style="background-color:#555cfb; border: solid 4px #04fb94; color: #fff;">Reset Filas Geral</button>
+                  <button type="submit" class="btn btn"  style="background-color:#555cfb; border: solid 4px #04fb94; color: #fff;">Reset Filas Geral</button>
               </div>
                 </div>
                     <div class="course-box">
@@ -167,6 +167,8 @@
                           </table>
                         </div>
                       </div>
+                    </div>
+                  </div>
         </section>
         
     </div>
@@ -220,20 +222,52 @@
         });
       </script>
 
-      <script>
-        function carregarQuadro(){
+<script>
+  function carregarQuadro() {
+      Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Operadores Carregados!",
+          showConfirmButton: false,
+          timer: 1500,
+          willClose: () => {
+            carregar_Quadro();
+            console.log("Quadro carregado com sucesso!"); // Exemplo de lógica
+          }
+      });
+  }
+</script>
+
+<script>
+          function atualizarQuadro(){
             Swal.fire({
               position: "top-end",
               icon: "success",
-              title: "Operadores Carregados!",
+              title: "Operadores Sendo Atualizados!",
               showConfirmButton: false,
               timer: 1500,
               willClose: () => {
-                  carregar_quadro();
+                reset_multiskill();
                   }
             });
           }
-      </script>
+</script>
+
+<script>
+  function atualizarQuadro_chat(){
+    Swal.fire({
+      position: "top-end",
+      icon: "success",
+      title: "Operadores Sendo Atualizados!",
+      showConfirmButton: false,
+      timer: 1500,
+      willClose: () => {
+        reset_chat();
+          }
+    });
+  }
+</script>
+
 
 </body>
 

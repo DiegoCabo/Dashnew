@@ -16,12 +16,13 @@ body{
 }
 nav{
   position: relative;
-  height: 200ch;
+  height: 100vh;
   top: 0;
   bottom: 0;
   left: 0;
   background: #fff;
   width: 280px;
+  overflow: hidden;
   box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
 }
 .logo{
@@ -101,16 +102,13 @@ a:hover{
   display: flex;
 }
 .main-skills .card{
-  width: 25%;
+  width: 100%;
   margin: 10px;
   background: #fff;
   text-align: center;
   border-radius: 10px;
   padding: 10px;
   box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
-}
-.dataTables_wrapper{
-  width: 100%;
 }
 .main-skills .card h3{
   margin: 10px;
@@ -172,10 +170,10 @@ a:hover{
   border-radius: 10px;
   background: rgb(234, 233, 235);
   box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
-  overflow-x: scroll;
 }
 .box{
   width: 50%;
+  height: 100%;
   padding: 10px;
   margin: 10px;
   border-radius: 10px;
@@ -231,7 +229,20 @@ label {
   color: #6b50ff;
   font-size: 12px;
 }
-
+.col-12{
+  text-align:justify
+}
+.form-label{
+  text-align: left;
+  justify-content: left;
+}
+.form-control{
+  width: 100%;
+  border-bottom: solid 2px #525252;
+  background-color: #f7f7f7;
+  font-size: 15px;
+  border-radius: 5px;
+}
 /* ===== Scrollbar CSS ===== */
 /* Firefox */
 * {
@@ -314,6 +325,10 @@ input[type="date"] {
   width: 100%;
   transition: all 0.3s ease-in-out;
   padding: 0.5rem;
-  overflow: hidden;
+  overflow-y: auto;
 }
 
+#tbody1_wrapper{
+width: -webkit-fill-available;
+
+}

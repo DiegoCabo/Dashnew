@@ -179,7 +179,7 @@ def alertas():
     chrome_profile = r"C:\Users\diego.carelli\AppData\Local\Google\Chrome\User Data"  # Caminho do perfil do Chrome
 
     options = Options()
-    options.add_argument("--headless")  # Roda o navegador sem interface gráfica
+    #options.add_argument("--headless")  # Roda o navegador sem interface gráfica
     options.add_argument("--disable-gpu")
     options.add_argument(f"--user-data-dir={chrome_profile}")  # Define o caminho do perfil do Chrome
 
@@ -225,7 +225,6 @@ def alertas():
 
     dados.columns = ["alertas", "impactados"]
     banco = dados.to_json(orient='columns')
-    print(banco)
     return banco
 
 @app.route('/pesquisa_demanda', methods=['GET'])
@@ -1149,8 +1148,23 @@ def home():
 
 def faz_cadastro():
 
-    vetor = [291,473,866,788,45,43,699,17,264,51,403,316,38,745,314,384,896,361,41,740,40,424,358,707,39,16,26,1095,290,342,200,283,683,710,741,737,759,760,1306,1297,1310,1071,809,852,863,1305,884,933,1073,1312,263,1070,1097,1101,308,1100,1303,1295,1301,1309,1299,1300,1304,1311,1294,1296,1308,349,292,304,787,1069,1302,1307]
-    queue_ids = [1980]
+    vetor = [
+  304, 314, 620, 866, 1461, 292, 316, 1097, 1070, 562,
+  1073, 833, 724, 863, 561, 1223, 1460, 1225, 610, 893,
+  1294, 1124, 1500, 1463, 575, 1498, 1125, 1476, 729, 787,
+  1513, 1230, 683, 1232, 1483, 283, 488, 1441, 1459, 557,
+  1235, 1499, 290, 759, 1481, 349, 1275, 672, 597, 560,
+  291, 358, 1296, 852, 281, 1129, 1297, 1480, 1130, 569,
+  1457, 933, 1247, 1501, 1249, 745, 828, 676, 1133, 1101,
+  1426, 760, 1250, 1134, 1429, 1253, 1443, 1456, 1277, 1464,
+  770, 1301, 522, 1303, 1503, 1254, 1136, 518, 678, 1504,
+  1440, 263, 1455, 1462, 1451, 1431, 1437, 1255, 617, 1436,
+  700, 1095, 481, 1137, 521, 565, 1259, 1259, 1506, 1304,
+  559, 1138, 403, 1507, 1465, 1458, 1305, 674, 1071, 1261,
+  1264, 1442, 1266, 528, 1433, 1432, 593, 517, 1139, 533,
+  1312, 1509, 581, 1140, 1510, 1427, 1100, 1306, 264, 1307,
+  1454, 1269, 1424, 1069, 590, 1308];
+    queue_ids = [1653, 1654, 1651, 1652]
 
     for i in range(len(vetor)):
 
@@ -1170,7 +1184,7 @@ def faz_cadastro():
             'token': '91440272-3f9c-45b3-8177-b2dd49c49920',
             'Content-Type': 'application/json',
         }
-
+        print('Ok')
         response = requests.request("PUT", url, headers=headers, data=payload)
 
 
@@ -1262,7 +1276,33 @@ def caminho():
 
 @app.route('/quadro')
 def quadro():
-    return render_template('quadro.html')
+    conn = pg8000.connect(
+        host="192.168.93.151",
+        database="sadig",
+        user="eduardo_anjour",
+        password="klw$$$40"
+    )
+    cursor = conn.cursor()
+
+    query = """
+        SELECT
+            nome,
+            login_evolux,
+            grupo_de_atendimento,
+            tipo_de_atendimento,
+            id_evolux
+            FROM callcenter_negocios.quadro_operadores 
+            WHERE 
+            mes_ref::date >= DATE_TRUNC('month', current_date) and 
+            grupo_de_atendimento in ('HD', 'SAC', 'MULTISKILL', 'RETENÇÃO')"""
+
+    cursor.execute(query)
+    rows1 = cursor.fetchall()
+    cursor.close()
+
+    banco1 = pd.DataFrame(rows1, columns=['nome', 'login', 'grupo','tipo', 'id'])
+    banco1 = banco1.to_json(orient='columns')
+    return banco1
 
 
 @app.route('/quadro_result', methods=['GET'])
@@ -1420,7 +1460,7 @@ def download_html():
     df = pd.DataFrame(important_messages, columns=['ID', 'CONVERSA'])
     df['CONVERSA'] = df['CONVERSA'].tolist()
     todo_texto = " ".join(s for s in df['CONVERSA'])
-    print(todo_texto)
+
     stopwords = set(STOPWORDS)
     stopwords.update(['não', 'gostaria', 'sem', 'mais', 'confirmar', 'vou', 'minha', 'não', 'preciso', 'a', 'o', 'senha', 'troca', 'esse', 'o', 'queria', ',', 'Essa','não', 'está', 'Quero', 'a', 'já', 'estou', 'com','aqui', 'Bom', 'dia', '.', 'por', 'motivo', 'de', 'do', 'fixo','na', 'rua', 'cabo','Olá', 'boa', 'tarde', 'Tudo', 'bem','?','!','Falar', 'com', 'minha', 'aguarde', 'aguardar','Pq','pq', 'tá', 'Nova', 'dar','então', 'igual'])
     # Obter o caminho absoluto da pasta "static" do projeto Flask
@@ -1431,6 +1471,7 @@ def download_html():
 
     def extrair_ideia_central(frase):
         nltk.download('punkt')
+        nltk.download('punkt_tab')
         palavras = nltk.word_tokenize(frase.lower())
 
         custom_stopwords = [	'não',	'gostaria',	'sem',	'mais',	'confirmar',	'vou',	'minha',	'preciso',	'a',	'o',	'senha',	'troca',	'esse',	'queria',	'estou',	',',	'Essa',	'está',	'Quero',	'já',	'com',	'aqui',	'Bom',	'dia',	'.',	'por',	'motivo',	'de',	'do',	'fixo',	'na',	'rua',	'cabo',	'Olá',	'boa',	'tarde',	'Tudo',	'bem',	'?',	'!',	'Falar',	'com',	'como',	'fico',	'agora',	'para',	'diminuir',	'conseguindo',	'quando',	'todos',	'mandam',	'pelo',	'whatsapp',	'Foi',	'dito',	'veio',	'Discutir',	'Pagar',	'Houve',	'teve',	'um',	'vence',	'hoje',	'ETA',	'Qual',	'justificativa?',	'solicitar',	'aberto',	'referente',	'subiu',	'recebido',	'física',	'casa',	'Vi',	'estão',	'rever',	'veio',	'com',	'mais',	'um',	'feito',	'mas',	'ainda',	'foi',	'na'	]
@@ -1448,7 +1489,7 @@ def download_html():
     # Gerando a WordCloud
     wordcloud = WordCloud(stopwords=stopwords,
                           background_color="black",
-                          width=1600, height=800).generate(todo_texto)
+                          width=800, height=600).generate(todo_texto)
                           
     wordcloud.to_file('wordcloud_output.png')
 

@@ -142,7 +142,6 @@ async function fazPESQUISA() {
   };
   const layout1 = {
     height: 340,
-    width:540,
     title: "Bloqueios",
     colorway: ["#7B68EE"],
     //plot_bgcolor: "#272727",
@@ -838,15 +837,15 @@ async function escalados_logados() {
 document.addEventListener('DOMContentLoaded', () => {
   setInterval(() => {
     fazGET_Filas();
-  }, 60000);
+  }, 300000);
 
   setInterval(() => {
     fazGET_GRAFICO();
-  }, 60000);
+  }, 300000);
   
   setInterval(() => {
     fazGET_Geral();
-  }, 60000);
+  }, 300000);
   
   setInterval(() => {
     updatconsolidsac();
@@ -865,10 +864,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }, 60000);
   
   
-  setInterval(() => {
-    monitorarVariavel();
-  }, 20000);
-
   setInterval(() => {
     filavoz();
   }, 300000);
@@ -1135,28 +1130,33 @@ async function fazGet_produtividadeUso() {
   table.draw();
 }
 //======================================================================================
-async function fazGetAlertas() {
-  const response = await fetch("/alertas");
-  const data = await response.json();
+function fazGetAlertas() {
+  fetch("/alertas")
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
 
-  var table = $('#tbody2').DataTable()
+      const table = $('#tbody2').DataTable();
       table.clear();
 
-  for (const key in data.alertas) {
-    const rowData = [
-    data.alertas[key], 
-    data.impactados[key]];
-    table.row.add(rowData);
-      
-      // Atualizar a tabela para refletir as alterações
-      if (parseInt(data.impactados) > 100) {
-        // Add the CSS styles for background color and text color
-        rowData[1] = `<span style="background-color: red; color: white;">${rowData[1]}</span>`;
-      }
-    }
-      table.draw();
+      for (const key in data.alertas) {
+        const impactados = data.impactados[key];
+        const rowData = [data.alertas[key], impactados];
 
-    }
+        if (parseInt(impactados) > 100) {
+          // Add the CSS styles for background color and text color
+          rowData[1] = `<span style="background-color: red; color: white;">${impactados}</span>`;
+        }
+
+        table.row.add(rowData);
+      }
+
+      table.draw();
+    })
+    .catch(error => {
+      console.error('Error fetching alerts:', error);
+    });
+}
 //
 
 // Inicializa o vetor no Local Storage
@@ -1167,5 +1167,38 @@ if (!localStorage.getItem("valor_pca")) {
 
 }
 
+async function fazGet_quadro() {
+  
+  const response = await fetch('/quadro');
+  const data = await response.json();
 
+  const table = $('#tbody').DataTable();
+  table.clear();
 
+  for (const key in data.nome) {
+    const rowData = [
+      data.id[key],
+      data.nome[key],
+      data.login[key],
+      data.grupo[key],
+      data.tipo[key],
+      `<input type="checkbox" class="row-checkbox" data-id="${data.id[key]}">`, // Checkbox com data-id
+    ];
+     
+    table.row.add(rowData);
+  }
+
+  table.draw(); // Redesenha a tabela após adicionar as linhas
+  
+// Adiciona o listener para o checkbox "Selecionar Todos"
+document.getElementById('select-all').addEventListener('change', function() {
+    const checkboxes = document.querySelectorAll('.row-checkbox');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = this.checked;
+    });
+});
+}
+
+function carregar_quadro() {
+  fazGet_quadro();
+}

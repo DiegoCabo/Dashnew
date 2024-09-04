@@ -75,11 +75,65 @@
                         <p id="update"></p>
                         <div id="map" style="height: 80vh;"></div>
                     </section>
+
+                    <div id="legend" style="background: white; padding: 10px; border: 1px solid #6b50ff; border-radius: 5px; position: absolute; top: 10px; right: 10px; z-index: 1000;">
+                        <h4>Legenda</h4>
+                    
+                        <div id="legend-8-9" class="legend-section" style="display: none;">
+                            <div>
+                                <img src="/static/img/xx3qZCRoRt_red.gif" style="width: 20px; height: 20px; vertical-align: middle;"> > 150 Ligação(ões) (8h - 9h) - Alta taxa de crescimento
+                            </div>
+                            <div>
+                                <img src="/static/img/xx3qZCRoRt_orange.gif" style="width: 20px; height: 20px; vertical-align: middle;"> 100 - 150 Ligação(ões) (8h - 9h) - Moderada taxa de crescimento
+                            </div>
+                            <div>
+                                <img src="/static/img/xx3qZCRoRt_yellow.gif" style="width: 20px; height: 20px; vertical-align: middle;"> < 100 Ligação(ões) (8h - 9h) - Baixa taxa de crescimento
+                            </div>
+                        </div>
+                    
+                        <div id="legend-10-12" class="legend-section" style="display: none;">
+                            <div>
+                                <img src="/static/img/xx3qZCRoRt_red.gif" style="width: 20px; height: 20px; vertical-align: middle;"> > 500 Ligação(ões) (10h - 12h) - Alta taxa de crescimento
+                            </div>
+                            <div>
+                                <img src="/static/img/xx3qZCRoRt_orange.gif" style="width: 20px; height: 20px; vertical-align: middle;"> 200 - 500 Ligação(ões) (10h - 12h) - Moderada taxa de crescimento
+                            </div>
+                            <div>
+                                <img src="/static/img/xx3qZCRoRt_yellow.gif" style="width: 20px; height: 20px; vertical-align: middle;"> < 200 Ligação(ões) (10h - 12h) - Baixa taxa de crescimento
+                            </div>
+                        </div>
+                    
+                        <div id="legend-12-16" class="legend-section" style="display: none;">
+                            <div>
+                                <img src="/static/img/xx3qZCRoRt_red.gif" style="width: 20px; height: 20px; vertical-align: middle;"> > 700 Ligação(ões) (12h - 16h) - Alta taxa de crescimento
+                            </div>
+                            <div>
+                                <img src="/static/img/xx3qZCRoRt_orange.gif" style="width: 20px; height: 20px; vertical-align: middle;"> 500 - 700 Ligação(ões) (12h - 16h) - Moderada taxa de crescimento
+                            </div>
+                            <div>
+                                <img src="/static/img/xx3qZCRoRt_yellow.gif" style="width: 20px; height: 20px; vertical-align: middle;"> < 500 Ligação(ões) (12h - 16h) - Baixa taxa de crescimento
+                            </div>
+                        </div>
+                    
+                        <div id="legend-16" class="legend-section" style="display: none;">
+                            <div>
+                                <img src="/static/img/xx3qZCRoRt_red.gif" style="width: 20px; height: 20px; vertical-align: middle;"> > 1000 Ligação(ões) (16h ou mais) - Alta taxa de crescimento
+                            </div>
+                            <div>
+                                <img src="/static/img/xx3qZCRoRt_orange.gif" style="width: 20px; height: 20px; vertical-align: middle;"> 800 - 1000 Ligação(ões) (16h ou mais) - Moderada taxa de crescimento
+                            </div>
+                            <div>
+                                <img src="/static/img/xx3qZCRoRt_yellow.gif" style="width: 20px; height: 20px; vertical-align: middle;"> < 800 Ligação(ões) (16h ou mais) - Baixa taxa de crescimento
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+
         </section>
 
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
         <script>
         // Inicializa o mapa
 const map = L.map('map').setView([-14.2350, -51.9253], 4); // Centro do Brasil
@@ -314,6 +368,31 @@ for (const cidade in contagem) {
 document.addEventListener('DOMContentLoaded', contarRegistrosPorCidade);
 setInterval(contarRegistrosPorCidade, 1200000)
 
+    </script>
+    <script>
+        function showLegendBasedOnTime() {
+    const currentHour = new Date().getHours();
+    
+    // Esconde todas as seções da legenda
+    const sections = document.querySelectorAll('.legend-section');
+    sections.forEach(section => {
+        section.style.display = 'none';
+    });
+
+    // Mostra a seção correta com base na hora atual
+    if (currentHour >= 8 && currentHour < 9) {
+        document.getElementById('legend-8-9').style.display = 'block';
+    } else if (currentHour >= 10 && currentHour < 12) {
+        document.getElementById('legend-10-12').style.display = 'block';
+    } else if (currentHour >= 12 && currentHour < 16) {
+        document.getElementById('legend-12-16').style.display = 'block';
+    } else if (currentHour >= 16) {
+        document.getElementById('legend-16').style.display = 'block';
+    }
+}
+
+// Chama a função ao carregar a página
+window.onload = showLegendBasedOnTime;
     </script>
     </div>
 </body>

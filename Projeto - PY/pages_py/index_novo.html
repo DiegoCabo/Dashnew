@@ -247,8 +247,6 @@
           <button class="btn btn-primary" onclick="pausachat()" style="background-color: #9e8dff; padding: 10px; border-radius: 10px; cursor: pointer; font-size: 10px;"> USO </button>
           <div class="course-box">
             <div class="course">
-
-
               <table id="tbody1" class="sortable table table-striped table-bordered nowrap" style="text-align: center;">
                 <thead style="font-size: 12px;">
                   <tr>
@@ -418,102 +416,78 @@
 
 <!--=====================================================================-->
 <script>
-  const Toast = Swal.mixin({
+const Toast = Swal.mixin({
   toast: true,
   position: 'top-end',
   showConfirmButton: false,
-  timer: 9000,
+  timer: 5000,
   timerProgressBar: true,
   didOpen: (toast) => {
-    toast.addEventListener('mouseenter', Swal.stopTimer)
-    toast.addEventListener('mouseleave', Swal.resumeTimer)
+    toast.addEventListener('mouseenter', Swal.stopTimer);
+    toast.addEventListener('mouseleave', Swal.resumeTimer);
   }
-})
+});
 
-function showAlert(valor) {
-  Toast.fire({
-    icon: 'success',
-    title: `Valor subiu para ${valor}`
-  })
+function showAlert(message, options) {
+  return Swal.fire({
+    title: message,
+    ...options,
+    position: 'center', // Centraliza na página
+    showCloseButton: true,
+    customClass: {
+      popup: 'custom-popup' // Classe personalizada para o popup
+    }
+  });
 }
 
 function showAlert1(valor) {
-  Toast.fire({
+  return showAlert(`Valor está estável/subindo - ${valor}%`, {
     icon: 'info',
-    title: `Valor estava em ${valor}`
-  })
+    html: '<div class="alert-content"><img src="/static/img/Animation - 1724682744110.gif" alt=""></div>',
+  });
 }
 
 function showAlert3() {
-  Toast.fire({
+  return showAlert('Atenção ao tamanho da FILA NO VOZ, o valor está subindo!', {
     icon: 'warning',
-    title: 'Atenção ao tamanho da FILA NO VOZ, o valor está subindo!',
-    html: '<img src="/static/img/Animation - 1723321581006.gif" alt="" width="45px" height="45px">'
-  })
+    html: '<div class="alert-content"><img src="/static/img/Animation - 1724682617950.gif"></div>',
+  });
 }
 
 function showAlert4() {
-  Toast.fire({
+  return showAlert('Atenção ao tamanho da FILA NO CHAT, o valor já ultrapassou 100 clientes e está subindo!', {
     icon: 'warning',
-    title: 'Atenção ao tamanho da FILA NO CHAT, o valor está subindo!',
-    html: '<img src="/static/img/Animation - 1723321581006.gif" alt="" width="45px" height="45px">'
-  })
+    html: '<div class="alert-content"><img src="/static/img/Animation - 1724682617950.gif"></div>',
+  });
+}
+
+function showAlert5() {
+  return showAlert('Atenção ao tamanho da FILA NO CHAT, o valor já ultrapassou <span style="color: red;">50</span> clientes e está subindo!', {
+    icon: 'warning',
+    html: '<div class="alert-content"><img src="/static/img/Animation - 1724683417469.gif"></div>',
+  });
+}
+
+function showAlert6() {
+  return showAlert('Atenção ao tamanho da FILA NO CHAT, o valor já ultrapassou <span style="color: red;">150</span> clientes e está subindo!', {
+    icon: 'warning',
+    html: '<div class="alert-content"><img src="/static/img/l1Et1g3ReLJ8zfEVq.gif"></div>',
+  });
 }
 
 let valorAnteriorPca = null;
 let valorAnteriorEsperaVoz = null;
 let valorAnteriorChat = null;
 
-function monitorarVariavelPca() {
-  // Obter o valor atual da variável PCA
-  const valorPca = document.getElementById("valor_pca").textContent;
-
-  // Verificar se há mudanças e atualizar se necessário
-  if (valorPca !== valorAnteriorPca) {
-    valorAnteriorPca = valorPca; // Atualiza o valor anterior
-    atualizarLocalStorage("valor_pca", valorPca);
-  }
-}
-
-function monitorarVariavelEsperaVoz() {
-  // Obter o valor atual da variável Espera Voz
-  const valorEsperaVoz = document.getElementById("valor_espera").textContent;
-
-  // Verificar se há mudanças e atualizar se necessário
-  if (valorEsperaVoz !== valorAnteriorEsperaVoz) {
-    valorAnteriorEsperaVoz = valorEsperaVoz; // Atualiza o valor anterior
-    atualizarLocalStorage("espera_voz", valorEsperaVoz);
-  }
-}
-
-function monitorarVariavelChat() {
-  // Obter o valor atual da variável Chat
-  const valorChat = document.getElementById("chatTotal").textContent;
-
-  // Verificar se há mudanças e atualizar se necessário
-  if (valorChat !== valorAnteriorChat) {
-    valorAnteriorChat = valorChat; // Atualiza o valor anterior
-    atualizarLocalStorage("espera_chat", valorChat);
-  }
-}
-
-function monitorarVariaveis() {
-  monitorarVariavelPca();
-  monitorarVariavelEsperaVoz();
-  monitorarVariavelChat();
-  calcularMediaMovel();
-}
-
 function atualizarLocalStorage(chave, valor) {
-  // Obter o vetor do Local Storage
-  const vetor = JSON.parse(localStorage.getItem(chave)) || []; // Inicia um vetor vazio se for null
-  vetor.push(valor); // Adiciona o novo valor ao vetor
-  // Atualizar o vetor no Local Storage
+  const vetor = JSON.parse(localStorage.getItem(chave)) || [];
+  vetor.push(valor);
   localStorage.setItem(chave, JSON.stringify(vetor));
 }
 
 function calcularMediaMovel() {
   const vetorPca = JSON.parse(localStorage.getItem("valor_pca")) || [];
+  if (vetorPca.length < 3) return;
 
   const mediaMovel =
     (parseFloat(vetorPca[vetorPca.length - 1]) +
@@ -522,7 +496,10 @@ function calcularMediaMovel() {
 
   const valorMaisRecente = parseFloat(vetorPca[vetorPca.length - 1]);
   if (mediaMovel < valorMaisRecente) {
-    showAlert(valorMaisRecente);
+    showAlert(valorMaisRecente, {
+      icon: 'warning',
+      html: '<div>PCA está subindo!</div>'
+    });
   } else {
     showAlert1(valorMaisRecente);
   }
@@ -530,21 +507,69 @@ function calcularMediaMovel() {
 
 function filavoz() {
   const vetorEsperaVoz = JSON.parse(localStorage.getItem("espera_voz")) || [];
-  if (parseInt(vetorEsperaVoz[vetorEsperaVoz.length - 1]) >= 40) {
+  if (vetorEsperaVoz.length > 0 && parseInt(vetorEsperaVoz[vetorEsperaVoz.length - 1]) >= 40) {
     showAlert3();
   }
 }
+
 function filachat() {
   const vetorChat = JSON.parse(localStorage.getItem("espera_chat")) || [];
-  if (parseInt(vetorChat[vetorChat.length - 1]) >= 40) {
-    showAlert4();
+  if (vetorChat.length > 0) {
+    if (parseInt(vetorChat[vetorChat.length - 1]) >= 150) {
+      showAlert6();
+      return;
+    } 
+    if (parseInt(vetorChat[vetorChat.length - 1]) >= 100) {
+      showAlert4();
+      return;
+    } 
+    if (parseInt(vetorChat[vetorChat.length - 1]) >= 50) {
+      showAlert5();
+      return;
+    } 
   }
 }
 
-// Criando um Mutação Observer
-const observer = new MutationObserver(monitorarVariavel);
+// Funções de monitoramento
+function monitorarVariavelPca(mutations) {
+  mutations.forEach(mutation => {
+    const valorPca = mutation.target.textContent;
+    if (valorPca !== valorAnteriorPca) {
+      valorAnteriorPca = valorPca;
+      atualizarLocalStorage("valor_pca", valorPca);
+      calcularMediaMovel();
+    }
+  });
+}
 
-// Configurações do observer para observar mudanças de texto
+function monitorarVariavelEsperaVoz(mutations) {
+  mutations.forEach(mutation => {
+    const valorEsperaVoz = mutation.target.textContent;
+    if (valorEsperaVoz !== valorAnteriorEsperaVoz) {
+      valorAnteriorEsperaVoz = valorEsperaVoz;
+      atualizarLocalStorage("espera_voz", valorEsperaVoz);
+      filavoz();
+    }
+  });
+}
+
+function monitorarVariavelChat(mutations) {
+  mutations.forEach(mutation => {
+    const valorChat = mutation.target.textContent;
+    if (valorChat !== valorAnteriorChat) {
+      valorAnteriorChat = valorChat;
+      atualizarLocalStorage("espera_chat", valorChat);
+      filachat();
+    }
+  });
+}
+
+// Criando os Mutation Observers
+const observerPca = new MutationObserver(monitorarVariavelPca);
+const observerEsperaVoz = new MutationObserver(monitorarVariavelEsperaVoz);
+const observerChat = new MutationObserver(monitorarVariavelChat);
+
+// Configurações do observer
 const config = {
   childList: true,
   subtree: true,
@@ -552,9 +577,33 @@ const config = {
 };
 
 // Observando os elementos desejados
-observer.observe(document.getElementById("valor_pca"), config);
-observer.observe(document.getElementById("valor_espera"), config);
-observer.observe(document.getElementById("chatTotal"), config);
+observerPca.observe(document.getElementById("valor_pca"), config);
+observerEsperaVoz.observe(document.getElementById("valor_espera"), config);
+observerChat.observe(document.getElementById("chatTotal"), config);
+
+// CSS personalizado
+const style = document.createElement('style');
+style.innerHTML = `
+  .custom-popup {
+    width: 800px; /* Ajuste a largura conforme necessário */
+    heigh: 500px;
+    padding: 20px; /* Ajuste o padding conforme necessário */
+    font-size: 16px; /* Ajuste o tamanho da fonte, se necessário */
+    border-radius: 10px; /* Bordas arredondadas */
+    display: flex; /* Flexbox para centralização */
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
+    flex-direction: column; /* Alinha itens em coluna */
+  }
+  
+  .alert-content {
+    display: flex; /* Flexbox para centralizar a animação */
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
+    width: 100%; /* Garante que ocupe toda a largura do popup */
+  }
+`;
+document.head.appendChild(style);
 </script>
 
   </body>

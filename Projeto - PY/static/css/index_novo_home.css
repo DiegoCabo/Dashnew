@@ -16,7 +16,6 @@ body{
 }
 nav{
   position: relative;
-  height: 100ch;
   top: 0;
   bottom: 0;
   left: 0;
@@ -302,9 +301,6 @@ input[type="date"] {
   background-color: #ffffcc;
   border-left: 6px solid #ffeb3b;
 }
-.dataTables_info{
-  font-size: 12px;
-}
 
 @keyframes alertAnimation {
   0% {
@@ -326,4 +322,80 @@ input[type="date"] {
   transition: all 0.3s ease-in-out;
   padding: 0.5rem;
   overflow-y: auto;
+}
+
+/* Ajustar a largura das colunas da tabela */
+table {
+  width: 100%; /* Garante que a tabela ocupe 100% da largura do contêiner */
+  border-collapse: collapse; /* Remove espaços entre as células */
+}
+
+th, td {
+  padding: 10px; /* Adiciona padding para as células */
+  text-align: center; /* Centraliza o texto */
+  border: 1px solid #ddd; /* Adiciona bordas às células */
+}
+
+/* Ajustes específicos para colunas */
+th:nth-child(1),
+td:nth-child(1) {
+  width: 50px; /* Largura fixa para a coluna de ID */
+}
+
+th:nth-child(2),
+td:nth-child(2) {
+  width: 200px; /* Largura fixa para a coluna Nome */
+}
+
+th:nth-child(3),
+td:nth-child(3) {
+  width: 150px; /* Largura fixa para a coluna Login */
+}
+
+th:nth-child(4),
+td:nth-child(4) {
+  width: 150px; /* Largura fixa para a coluna Grupo Atendimento */
+}
+
+th:nth-child(5),
+td:nth-child(5) {
+  width: 150px; /* Largura fixa para a coluna Tipo Atendimento */
+}
+
+th:nth-child(6),
+td:nth-child(6) {
+  width: 100px; /* Largura fixa para a coluna Check */
+}
+
+/* Estilização da paginação */
+.dataTables_wrapper .dataTables_paginate {
+  padding: 10px; /* Adiciona padding */
+  text-align: right; /* Centraliza a paginação */
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  padding: 5px 10px; /* Ajusta padding dos botões de paginação */
+  margin: 0 5px; /* Espaçamento entre botões */
+  border-radius: 4px; /* Bordas arredondadas */
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+  background-color: #00fa97; /* Cor de fundo do botão atual */
+  color: white; /* Cor do texto do botão atual */
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+  background-color: #00b77c; /* Cor de fundo ao passar o mouse */
+  color: white; /* Cor do texto ao passar o mouse */
+}
+.dataTables_length, .dataTables_info{
+  text-align: start;
+}
+.dataTables_filter{
+  margin-bottom: 5px;
+  text-align: right;
+}
+
+.paginate_button {
+  display:inline;
 }

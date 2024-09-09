@@ -27,11 +27,11 @@
                     <img src="/static/img/pngwing.com.png" alt="" style="border: 3px solid #6b50ff; border-radius: 50%;">
                     <span class="nav-item" style="color: #6b50ff;">DashBoard</span>
                 </a></li>
-                <li><a href="home">
+                <li><a href="home" target="_blank">
                     <i class="fas fa-home"></i>
                     <span class="nav-item">Home</span>
                 </a></li>
-                <li><a href="painelVoz">
+                <li><a href="painelVoz" target="_blank">
                     <i class="fas fa-chart-line"></i>
                     <span class="nav-item">Dash</span>
                 </a></li>
@@ -39,15 +39,15 @@
                     <i class="fas fa-wallet"></i>
                     <span class="nav-item">Wallet</span>
                 </a></li>
-                <li><a href="massivas">
+                <li><a href="/" target="_blank">
                     <i class="fas fa-circle-exclamation"></i>
                     <span class="nav-item">Massivas</span>
                 </a></li>
-                <li><a href="clientesUSO">
+                <li><a href="clientesUSO" target="_blank">
                     <i class="fas fa-comment"></i>
                     <span class="nav-item">Sent. Uso</span>
                 </a></li>
-                <li><a href="encerramentoUSO">
+                <li><a href="encerramentoUSO" target="_blank">
                     <i class="fas fa-cog"></i>
                     <span class="nav-item">Enc. Uso</span>
                 </a></li>
@@ -75,7 +75,7 @@
                         <p id="update"></p>
                         <div id="map" style="height: 80vh;"></div>
                     </section>
-
+                    <div id="tabela1"></div>
                     <div id="legend" style="background: white; padding: 10px; border: 1px solid #6b50ff; border-radius: 5px; position: absolute; top: 10px; right: 10px; z-index: 1000;">
                         <h4>Legenda</h4>
                     
@@ -194,6 +194,46 @@ function contarRegistrosPorCidade() {
 // Função para exibir os resultados no mapa
 function exibirResultadosNoMapa(contagem) {
     // Coordenadas das cidades (você pode ajustar conforme necessário)
+    const cidadesArray = Object.entries(contagem).map(([cidade, quantidade]) => ({ cidade, quantidade }));
+
+    // Ordenar o array por quantidade (decrescente)
+    cidadesArray.sort((a, b) => b.quantidade - a.quantidade);
+
+    // Pegar as top 5 cidades
+    const top5Cidades = cidadesArray.slice(0, 5);
+
+    // Criar a tabela HTML
+    let tabelaHTML = `
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Posição</th>
+                    <th>Cidade</th>
+                    <th>Quantidade</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+    top5Cidades.forEach((item, index) => {
+        tabelaHTML += `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${item.cidade}</td>
+                <td>${item.quantidade}</td>
+            </tr>
+        `;
+    });
+
+    tabelaHTML += `
+            </tbody>
+        </table>
+    `;
+
+    document.getElementById('tabela1').innerHTML = tabelaHTML;
+
+
+
     const coordenadasCidades = {
 "AGUAI - SP": [-22.2511, -46.8651],
 "AGUAS DA PRATA - SP": [-22.1180, -46.7221],

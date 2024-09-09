@@ -39,27 +39,27 @@
               <img src="/static/img/pngwing.com.png" alt="" style="    border: 3px solid #6b50ff;border-radius: 50%;">
               <span class="nav-item" style="color: #6b50ff;">DashBoard</span>
             </a></li>
-          <li><a href="home">
+          <li><a href="home" target="_blank">
               <i class="fas fa-home"></i>
               <span class="nav-item">Home</span>
             </a></li>
-          <li><a href="painelVoz">
+          <li><a href="painelVoz" target="_blank">
               <i class="fas fa-chart-line"></i>
               <span class="nav-item">Dash</span>
             </a></li>
-          <li><a href="mapa">
+          <li><a href="mapa" target="_blank">
               <i class="fas fa-map-location-dot"></i>
               <span class="nav-item">Mapa</span>
             </a></li>
-          <li><a href="massivas">
+          <li><a href="/" target="_blank">
               <i class="fas fa-circle-exclamation"></i>
               <span class="nav-item">Massivas</span>
             </a></li>
-          <li><a href="clientesUSO">
+          <li><a href="clientesUSO" target="_blank">
               <i class="fas fa-comment"></i>
               <span class="nav-item">Sent. Uso</span>
             </a></li>
-          <li><a href="encerramentoUSO">
+          <li><a href="encerramentoUSO" target="_blank">
               <i class="fas fa-cog"></i>
               <span class="nav-item">Enc. Uso</span>
             </a></li>
@@ -515,19 +515,40 @@ function filavoz() {
 function filachat() {
   const vetorChat = JSON.parse(localStorage.getItem("espera_chat")) || [];
   if (vetorChat.length > 0) {
-    if (parseInt(vetorChat[vetorChat.length - 1]) >= 150) {
+    const valorAtual = parseInt(vetorChat[vetorChat.length - 1]);
+    
+    // Cálculo da taxa de crescimento médio
+    let taxaCrescimento = 0;
+    if (vetorChat.length > 1) {
+      const ultimosValores = vetorChat.slice(-5); // Pega os últimos 5 valores
+      const diferencas = [];
+      for (let i = 1; i < ultimosValores.length; i++) {
+        diferencas.push(parseInt(ultimosValores[i]) - parseInt(ultimosValores[i-1]));
+      }
+      taxaCrescimento = diferencas.reduce((a, b) => a + b, 0) / diferencas.length;
+    }
+
+    if (valorAtual >= 150) {
       showAlert6();
       return;
     } 
-    if (parseInt(vetorChat[vetorChat.length - 1]) >= 100) {
-      showAlert4();
+    if (valorAtual >= 100) {
+      showAlert4(taxaCrescimento);
       return;
     } 
-    if (parseInt(vetorChat[vetorChat.length - 1]) >= 50) {
+    if (valorAtual >= 50) {
       showAlert5();
       return;
     } 
   }
+}
+
+// Modifique a função showAlert4 para receber e exibir a taxa de crescimento
+function showAlert4(taxaCrescimento) {
+  return showAlert(`Atenção ao tamanho da FILA NO CHAT, o valor já ultrapassou 100 clientes e está subindo!<br>Taxa de crescimento médio: ${taxaCrescimento.toFixed(2)} clientes/atualização`, {
+    icon: 'warning',
+    html: '<div class="alert-content"><img src="/static/img/Animation - 1724682617950.gif"></div>',
+  });
 }
 
 // Funções de monitoramento

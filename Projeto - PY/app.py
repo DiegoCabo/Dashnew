@@ -30,6 +30,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from flask_cors import CORS
 
+
 app = Flask(__name__, template_folder='pages_py')
 CORS(app)
 
@@ -1700,3 +1701,4 @@ GROUP BY
 if __name__ == '__main__':
     # Iniciar o servidor Flask
     app.run('0.0.0.0', port=5001, debug=True)
+    

@@ -45,6 +45,10 @@
                 <li><a href="/" target="_blank"><i class="fas fa-circle-exclamation"></i><span class="nav-item">Massivas</span></a></li>
                 <li><a href="clientesUSO" target="_blank"><i class="fas fa-comment"></i><span class="nav-item">Sent. Uso</span></a></li>
                 <li><a href="encerramentoUSO" target="_blank"><i class="fas fa-cog"></i><span class="nav-item">Enc. Uso</span></a></li>
+                <li><a href="mapaUSO" target="_blank">
+                  <i class="fas fa-map-location-dot"></i>
+                  <span class="nav-item">Mapa. CHAT</span>
+                </a></li>
                 <li><a href="" target="_blank"><i class="fas fa-question-circle"></i><span class="nav-item">Help</span></a></li>
                 <li><a href="" target="_blank" class="logout"><i class="fas fa-sign-out-alt"></i><span class="nav-item">Log out</span></a></li>
             </ul>
@@ -111,6 +115,7 @@
                             <button type="submit" class="btn btn" style="background-color:#555cfb; border: solid 4px #04fb94; color: #fff; margin-top: 10px">Atualizar</button>
                         </div>
                     </form>
+                  <!--<button onclick="B2BB()">transf</button>-->
             </div>
         </div>
 
@@ -120,22 +125,35 @@
                     <img src="/static/img/behavior.png" alt="" style="width: 45px; height: 45px;">
                 </div>
                 <h3>ATUALIZAR FILAS EM LOTE</h3>
-                <div style="display: flex;">
+                <div>
                       <div class="col-12" style="display: flex;">
-                        <button type="submit" class="btn btn" onclick="carregarQuadro()" style="background-color:#555cfb; border: solid 4px #04fb94; color: #fff">Carregar Quadro</button>
+                        <button type="submit" class="btn btn" onclick="carregarQuadro()" style="background-color:#fb557f; border: solid 4px #04fb94; color: #191919">Carregar Quadro</button>
                     </div>
+                    <select name="filas" id="filas_id" style="border-radius: 10px; border: solid 4px #04fb94; margin-left: 10px; text-align: center;">
+                      <option value="">Selecione uma fila</option>
+                      <option value="CHAT">CHAT</option>
+                      <option value="MULTISKILL">MULTISKILL</option>
+                      <option value="SAC">SAC</option>
+                      <option value="WEBBY">WEBBY</option>
+                      <option value="ALARES SAC + WEBBY MULTISKILL">ALARES SAC + WEBBY MULTISKILL</option>
+                      <option value="MULTI ALARES + SAC WEBBY">MULTI ALARES + SAC WEBBY</option>
+                  </select>
+
                     <div class="col-12" style="display: flex; margin-left: 10px;">
-                      <button type="submit" class="btn btn" onclick="atualizarQuadro_chat()" style="background-color:#555cfb; border: solid 4px #04fb94; color: #fff;">Reset CHAT</button>
+                      <button type="submit" class="btn btn" onclick="reset_filas()" style="background-color:#555cfb; border: solid 4px #04fb94; color: #fff;">Reset</button>
                   </div>
+                  <!--
                   <div class="col-12" style="display: flex; margin-left: 10px;">
                     <button type="submit" class="btn btn" style="background-color:#555cfb; border: solid 4px #04fb94; color: #fff;">Reset Retenção</button>
                 </div>
+                
                 <div class="col-12" style="display: flex; margin-left: 10px;">
                   <button type="submit" class="btn btn" onclick="atualizarQuadro()" style="background-color:#555cfb; border: solid 4px #04fb94; color: #fff;">Reset MULTISKILL</button>
               </div>
                 <div class="col-12" style="display: flex; margin-left: 10px;">
                   <button type="submit" class="btn btn"  style="background-color:#555cfb; border: solid 4px #04fb94; color: #fff;">Reset Filas Geral</button>
               </div>
+              -->
                 </div>
                     <div class="course-box">
                         <div class="box">
@@ -239,33 +257,76 @@
 </script>
 
 <script>
-          function atualizarQuadro(){
-            Swal.fire({
-              position: "top-end",
-              icon: "success",
-              title: "Operadores Sendo Atualizados!",
-              showConfirmButton: false,
-              timer: 1500,
-              willClose: () => {
-                reset_multiskill();
-                  }
-            });
-          }
-</script>
+function reset_filas() {
+    const filasSelecionada = document.getElementById('filas_id').value;
+    
+    // Configuração base do Swal.fire
+    const alertaConfig = {
+        position: "top-end",
+        icon: "success",
+        showConfirmButton: false,
+        timer: 1500
+    };
 
-<script>
-  function atualizarQuadro_chat(){
-    Swal.fire({
-      position: "top-end",
-      icon: "success",
-      title: "Operadores Sendo Atualizados!",
-      showConfirmButton: false,
-      timer: 1500,
-      willClose: () => {
-        reset_chat();
-          }
-    });
-  }
+    switch(filasSelecionada) {
+        case "CHAT":
+            Swal.fire({
+                ...alertaConfig,
+                title: "Resetando Fila CHAT!",
+                willClose: () => reset_chat()
+            });
+            break;
+            
+        case "MULTISKILL":
+            Swal.fire({
+                ...alertaConfig,
+                title: "Resetando Fila MULTISKILL!",
+                willClose: () => reset_multiskill()
+            });
+            break;
+            
+        case "SAC":
+            Swal.fire({
+                ...alertaConfig,
+                title: "Resetando Fila SAC!",
+                willClose: () => reset_sac()
+            });
+            break;
+            
+        case "WEBBY":
+            Swal.fire({
+                ...alertaConfig,
+                title: "Resetando Fila WEBBY!",
+                willClose: () => reset_webby()
+            });
+            break;
+            
+        case "ALARES SAC + WEBBY MULTISKILL":
+            Swal.fire({
+                ...alertaConfig,
+                title: "Resetando Fila ALARES SAC + WEBBY!",
+                willClose: () => reset_alares_webby()
+            });
+            break;
+            
+        case "MULTI ALARES + SAC WEBBY":
+            Swal.fire({
+                ...alertaConfig,
+                title: "Resetando MULTI ALARES + SAC WEBBY!",
+                willClose: () => reset_multi_sac()
+            });
+            break;
+            
+        default:
+            Swal.fire({
+                position: "top-end",
+                icon: "warning",
+                title: "Selecione uma fila!",
+                showConfirmButton: false,
+                timer: 1500
+            });
+    }
+}
 </script>
 
 

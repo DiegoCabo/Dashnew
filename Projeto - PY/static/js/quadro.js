@@ -13,7 +13,17 @@ const predefinedQueues = [
     1981, 1990, 1991
 ];
 
+//ALARES SAC + WEBBY MULTISKILL 
+const sac_webby = [1822, 1819, 1866, 1820, 1823, 1821, 1817, 2001, 1034, 1033, 1032, 1031, 630, 633, 51, 52, 53, 1457, 1380, 1387, 1417, 1645, 1646, 1651, 1656, 1650, 1652, 1655, 1657, 1517, 1742, 1743, 1990, 1991]
+
+//MULTI ALARES + SAC WEBBY
+const multi_sacWebby = [631, 637, 636, 635, 634, 1037, 1189, 1188, 1190, 1028, 1029, 1027, 1026, 66, 67, 59, 60, 58, 57, 56, 64, 65, 63, 62, 61, 1294, 1208, 1202, 1381, 1388, 1385, 1386, 1034, 1033, 1032, 1031, 630, 633, 51, 52, 53, 1457, 1380, 1387, 1417, 1645, 1651, 1656, 1650, 1652, 1655, 1657, 1653, 1660, 1666, 1658, 1654, 1661, 1667, 1659, 1711, 1517, 1742, 1743, 1980, 1981, 1990, 1991, 2037, 1820, 1823, 1821, 1817, 2001]
+
+const sac = [1034, 1033, 1032, 1031, 630, 633, 51, 52, 53, 1457, 1380, 1387, 1417, 1645, 1646, 1651, 1656, 1650, 1652, 1655, 1657, 1711, 1517, 1742, 1743, 1990, 1991]
+
 const chat = [74]
+
+const ret = [1662, 1663, 1818, 1517, 1664]
 
 // Função para atualizar operadores
 // Função para atualizar operadores
@@ -133,7 +143,177 @@ async function updateChat() {
     }
 }
 
+async function updateSac() {
+    // Seleciona a tabela e as linhas dela
+    const table = document.getElementById("tbody");
+    const rows = table.getElementsByTagName("tr");
 
+    for (let row of rows) {
+        // Seleciona o checkbox na linha atual
+        const checkbox = row.querySelector("input[type='checkbox']");
+        if (checkbox && checkbox.checked) {
+            const agent_id = parseInt(row.cells[0].innerText); // ID na primeira coluna
+            const name = row.cells[1].innerText; // Nome na segunda coluna
+            const login = row.cells[2].innerText; // Login na terceira coluna
+
+            // Usa o vetor de filas predefinidas
+            const agent_data = {
+                name: name,
+                login: login,
+                queues: sac // Filas predefinidas
+            };
+
+            try {
+                const options = {
+                    method: "PUT",
+                    headers: { "token": "9c68d152-ff24-403a-8e2c-6c90a1295afb", "Content-Type": "application/json" },
+                    body: JSON.stringify(agent_data)
+                };
+                // Altera a URL para apontar para a rota do seu servidor Python
+                const response = await fetch(`/update-agent/${agent_id}`, options);
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                // Exibe mensagem de sucesso
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Operadores Atualizados!",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                console.log("Operadores Atualizados:", await response.json());
+            } catch (error) {
+                // Exibe mensagem de erro
+                Swal.fire({
+                    position: "top-end",
+                    icon: "error",
+                    title: "Erro Ao Realizar Atualização!",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                console.error("Error updating agent:", error);
+            }
+        }
+    }
+}
+
+async function updateAlares_SAC_Webby_MULT() {
+    // Seleciona a tabela e as linhas dela
+    const table = document.getElementById("tbody");
+    const rows = table.getElementsByTagName("tr");
+
+    for (let row of rows) {
+        // Seleciona o checkbox na linha atual
+        const checkbox = row.querySelector("input[type='checkbox']");
+        if (checkbox && checkbox.checked) {
+            const agent_id = parseInt(row.cells[0].innerText); // ID na primeira coluna
+            const name = row.cells[1].innerText; // Nome na segunda coluna
+            const login = row.cells[2].innerText; // Login na terceira coluna
+
+            // Usa o vetor de filas predefinidas
+            const agent_data = {
+                name: name,
+                login: login,
+                queues: sac_webby // Filas predefinidas
+            };
+
+            try {
+                const options = {
+                    method: "PUT",
+                    headers: { "token": "9c68d152-ff24-403a-8e2c-6c90a1295afb", "Content-Type": "application/json" },
+                    body: JSON.stringify(agent_data)
+                };
+                // Altera a URL para apontar para a rota do seu servidor Python
+                const response = await fetch(`/update-agent/${agent_id}`, options);
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                // Exibe mensagem de sucesso
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Operadores Atualizados!",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                console.log("Operadores Atualizados:", await response.json());
+            } catch (error) {
+                // Exibe mensagem de erro
+                Swal.fire({
+                    position: "top-end",
+                    icon: "error",
+                    title: "Erro Ao Realizar Atualização!",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                console.error("Error updating agent:", error);
+            }
+        }
+    }
+}
+
+
+async function updateAlares_SAC_WEBBY() {
+    // Seleciona a tabela e as linhas dela
+    const table = document.getElementById("tbody");
+    const rows = table.getElementsByTagName("tr");
+
+    for (let row of rows) {
+        // Seleciona o checkbox na linha atual
+        const checkbox = row.querySelector("input[type='checkbox']");
+        if (checkbox && checkbox.checked) {
+            const agent_id = parseInt(row.cells[0].innerText); // ID na primeira coluna
+            const name = row.cells[1].innerText; // Nome na segunda coluna
+            const login = row.cells[2].innerText; // Login na terceira coluna
+
+            // Usa o vetor de filas predefinidas
+            const agent_data = {
+                name: name,
+                login: login,
+                queues: multi_sacWebby // Filas predefinidas
+            };
+
+            try {
+                const options = {
+                    method: "PUT",
+                    headers: { "token": "9c68d152-ff24-403a-8e2c-6c90a1295afb", "Content-Type": "application/json" },
+                    body: JSON.stringify(agent_data)
+                };
+                // Altera a URL para apontar para a rota do seu servidor Python
+                const response = await fetch(`/update-agent/${agent_id}`, options);
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                // Exibe mensagem de sucesso
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Operadores Atualizados!",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                console.log("Operadores Atualizados:", await response.json());
+            } catch (error) {
+                // Exibe mensagem de erro
+                Swal.fire({
+                    position: "top-end",
+                    icon: "error",
+                    title: "Erro Ao Realizar Atualização!",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                console.error("Error updating agent:", error);
+            }
+        }
+    }
+}
 
 async function fazGet_quadro() {
 
@@ -176,4 +356,21 @@ function reset_multiskill() {
 
 function reset_chat() {
     updateChat();
+}
+
+function reset_sac(){
+    updateSac();
+}
+
+function reset_webby() {
+    updateWebby();
+}
+
+
+function reset_alares_webby(){
+    updateAlares_SAC_Webby_MULT();
+}
+
+function reset_multi_sac(){
+    updateAlares_SAC_WEBBY();
 }

@@ -67,7 +67,7 @@ async function fazGET_Geral() {
   document.getElementById("tme_consolidadoHD").innerHTML = data[2]["tmeHD"];
   document.getElementById("tma_consolidadoHD").innerHTML = data[2]["tmaHD"];
 
-  /*document.getElementById("total_consolidadowebby").innerHTML = data[3]["Totalwebby"];
+  document.getElementById("total_consolidadowebby").innerHTML = data[3]["Totalwebby"];
   document.getElementById("atendidas_consolidadowebby").innerHTML =
     data[3]["atendidaswebby"];
   document.getElementById("pca_consolidadowebby").innerHTML = data[3]["Percentwebby"];
@@ -75,8 +75,9 @@ async function fazGET_Geral() {
     data[3]["Natendidaswebby"];
   document.getElementById("tme_consolidadowebby").innerHTML = data[3]["tmewebby"];
   document.getElementById("tma_consolidadowebby").innerHTML = data[3]["tmawebby"];
-} */
+  console.log(data[3]["tmawebby"])
 }
+
 
 //===============================================================================
 
@@ -510,7 +511,7 @@ async function usoValidacao() {
   img.width = 80;
   img.height = 80;
   img.margin = 30;
-  
+
   if (data.info1 === 'Not Data') {
     img.src = '/static/img/triste.png';
   } else {
@@ -528,7 +529,7 @@ async function zapValidacao() {
 
   const imgzap = document.getElementById('zap');
   const imgyt = document.getElementById('yt');
-  
+
   // Limpa o conteúdo atual dos elementos
   imgzap.innerHTML = '';
   imgyt.innerHTML = '';
@@ -754,25 +755,25 @@ async function fazGET_GRAFICO() {
   for (let i = 0; i < data.length - 1; i++) {
     pca.push(data[i]["Percent"] + "%");
   }
-/*
-  // Calcule a média exponencial de 4 períodos
-  var smoothingFactor = 2 / (3 + 1);
-  var exponentialAverage = [vetor[0]];
-  for (let i = 1; i < vetor.length; i++) {
-    exponentialAverage[i] = vetor[i] * smoothingFactor + exponentialAverage[i - 1] * (1 - smoothingFactor);
-  }
-
-  // Ajuste a linha da média exponencial para mostrar apenas os dados disponíveis
-   
-   
-  var data3 = {
-    x: xArray.slice(0, exponentialAverage.length),
-    y: exponentialAverage,
-    type: "lines",
-    line: { color: "red", width: 3, shape: "spline" },
-    name: "Média Exponencial 4 períodos",
-  };
-*/
+  /*
+    // Calcule a média exponencial de 4 períodos
+    var smoothingFactor = 2 / (3 + 1);
+    var exponentialAverage = [vetor[0]];
+    for (let i = 1; i < vetor.length; i++) {
+      exponentialAverage[i] = vetor[i] * smoothingFactor + exponentialAverage[i - 1] * (1 - smoothingFactor);
+    }
+  
+    // Ajuste a linha da média exponencial para mostrar apenas os dados disponíveis
+     
+     
+    var data3 = {
+      x: xArray.slice(0, exponentialAverage.length),
+      y: exponentialAverage,
+      type: "lines",
+      line: { color: "red", width: 3, shape: "spline" },
+      name: "Média Exponencial 4 períodos",
+    };
+  */
   var data2 = {
     x: xArray,
     y: pca,
@@ -801,7 +802,7 @@ async function fazGET_GRAFICO() {
     displayModeBar: false // Isso remove a barra de ferramentas
   };
 
-  Plotly.newPlot("render_grafico", bd, layout,config);
+  Plotly.newPlot("render_grafico", bd, layout, config);
 }
 //===============================================================================
 async function escalados_logados() {
@@ -834,57 +835,56 @@ async function escalados_logados() {
 //===============================================================================
 
 
-document.addEventListener('DOMContentLoaded', () => {
-  setInterval(() => {
-    fazGET_Filas();
-  }, 300000);
+setInterval(() => {
+  fazGET_Filas();
+}, 300000);
 
-  setInterval(() => {
-    fazGET_GRAFICO();
-  }, 300000);
-  
-  setInterval(() => {
-    fazGET_Geral();
-  }, 300000);
-  
-  setInterval(() => {
-    updatconsolidsac();
-  }, 900000);
-  
-  setInterval(() => {
-    fazGET_consolidado_hd();
-  }, 900000);
-  setInterval(() => {
-    fazGetChat();
-  }, 60000);
-  
+setInterval(() => {
+  fazGET_GRAFICO();
+}, 300000);
 
-  setInterval(() => {
-    fazGet_produtividadeUso();
-  }, 60000);
-  
-  
-  setInterval(() => {
-    filavoz();
-  }, 300000);
+setInterval(() => {
+  fazGET_Geral();
+}, 300000);
 
-  setInterval(() => {
-    filachat();
-  }, 300000);
+setInterval(() => {
+  updatconsolidsac();
+}, 900000);
+
+setInterval(() => {
+  fazGET_consolidado_hd();
+}, 900000);
+setInterval(() => {
+  fazGetChat();
+}, 60000);
 
 
-  setInterval(() => {
-    fazGET_GRAFICO();
-  }, 60000);
-  
-  setInterval(() => {
-    fazGET_Geral();
-  }, 60000);
-  
-  setInterval(() => {
-    fazGET_produtividade();
-  }, 3600000);
-});
+setInterval(() => {
+  fazGet_produtividadeUso();
+}, 60000);
+
+
+setInterval(() => {
+  filavoz();
+}, 300000);
+
+setInterval(() => {
+  filachat();
+}, 300000);
+
+
+setInterval(() => {
+  fazGET_GRAFICO();
+}, 60000);
+
+setInterval(() => {
+  fazGET_Geral();
+}, 60000);
+
+setInterval(() => {
+  fazGET_produtividade();
+}, 3600000);
+
 
 //===============================FUNÇÔES================================================
 function update_filas() {
@@ -928,10 +928,6 @@ function exportar() {
   fazGET_exportar();
 }
 
-function chat() {
-  fazGetChat();
-}
-
 function updatconsolidsac() {
   fazGET_consolidado_sac();
 }
@@ -943,27 +939,93 @@ function updateGrafico() {
   fazGET_GRAFICO();
 }
 
-function validaUSO(){
+function validaUSO() {
   usoValidacao();
 }
-function validaZAP(){
+function validaZAP() {
   zapValidacao();
 }
 
-function escalados(){
+function escalados() {
   escalados_logados();
 }
 
 function chat() {
   fazGetChat();
 }
-function alertas(){
+function alertas() {
   fazGetAlertas();
 }
 
+function B2BB() {
 
+    const data = new Date();
+    const selectedDate = new Date(data);
+    const dayOfWeek = selectedDate.getDay();
+
+    if (dayOfWeek === 6) {
+      verificarDepartamentoETransferir_sab();
+    }else if (dayOfWeek === 0) {
+      verificarDepartamentoETransferir_dom();
+      }
+    }
+
+setInterval(() => {
+  B2BB();
+}, 20000);
 //=================================REQUESTS USO==============================================
+async function verificarDepartamentoETransferir_sab() {
+  const response = await fetch("/B2B");
+  const data = await response.text();
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(data, "text/html");
 
+  const linhas = doc.querySelectorAll('#tab_4-1 tbody tr td');
+
+  for (let i = 0; i < linhas.length; i++) { // Corrigido: use < em vez de <=
+    if (linhas[i].textContent.trim() === "B2B ATENDIMENTO WEBBY") {
+      // Verifica se existe um elemento seguinte
+      if (i + 1 < linhas.length) { // Verifica se i + 1 está dentro do limite
+        const idChat = linhas[i + 1].textContent.trim();
+        console.log(idChat);
+        const url = `https://usodigital.net/portal/controller/CTRL_chat.php?action=_transferir&ID_CHAT=${idChat}&ID_AGENTE=139008&NM_AGENTE=DEBORA%20MOREIRA%20DAMASIO&ID_DEPARTAMENTO=64675&NOME_DEPARTAMENTO=B2B%20ATENDIMENTO%20WEBBY`;
+        console.log("TRANSFERIDO")
+        // Abre uma nova aba com a URL do Google
+        window.open(url, '_blank');
+      } else {
+        console.warn("ID do chat não encontrado após 'SAC WEBBYY'.");
+      }
+    }
+  }
+}
+
+async function verificarDepartamentoETransferir_dom() {
+  const response = await fetch("/B2B");
+  const data = await response.text();
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(data, "text/html");
+
+  const linhas = doc.querySelectorAll('#tab_4-1 tbody tr td');
+
+  for (let i = 0; i < linhas.length; i++) { // Corrigido: use < em vez de <=
+    if (linhas[i].textContent.trim() === "B2B ATENDIMENTO WEBBY") {
+      // Verifica se existe um elemento seguinte
+      if (i + 1 < linhas.length) { // Verifica se i + 1 está dentro do limite
+        const idChat = linhas[i + 1].textContent.trim();
+        console.log(idChat);
+        const url = `https://usodigital.net/portal/controller/CTRL_chat.php?action=_transferir&ID_CHAT=${idChat}&ID_AGENTE=139008&NM_AGENTE=DEBORA%20MOREIRA%20DAMASIO&ID_DEPARTAMENTO=64675&NOME_DEPARTAMENTO=B2B%20ATENDIMENTO%20WEBBY`;
+        console.log("TRANSFERIDO")
+        // Abre uma nova aba com a URL do Google
+        window.open(url, '_blank');
+      } else {
+        console.warn("ID do chat não encontrado após 'SAC WEBBYY'.");
+      }
+    }
+  }
+}
+
+
+//=======================================================================================
 async function fazGetChat() {
   const response = await fetch("/teste");
 
@@ -1040,23 +1102,23 @@ async function fazGetChat() {
         } else {
           totalLogados2 += 0; // Set to 0 if qtdL is not defined
         }
-      
-      if (departmentData[i].hasOwnProperty("qtdD")) {
-        qtyDispo2 += departmentData[i].qtdD;
+
+        if (departmentData[i].hasOwnProperty("qtdD")) {
+          qtyDispo2 += departmentData[i].qtdD;
+        } else {
+          qtyDispo2 += 0; // Set to 0 if qtdL is not defined
+        }
       } else {
-        qtyDispo2 += 0; // Set to 0 if qtdL is not defined
+        // If department property does not exist, set both total1, total2, and totalLogados to 0
+        total1 = 0;
+        total2 = 0;
+        totalLogados = 0;
+        totalLogados2 = 0;
+        qtyDispo = 0;
+        qtyDispo2 = 0;
+        break;
       }
-    } else {
-      // If department property does not exist, set both total1, total2, and totalLogados to 0
-      total1 = 0;
-      total2 = 0;
-      totalLogados = 0;
-      totalLogados2 = 0;
-      qtyDispo = 0;
-      qtyDispo2 = 0;
-      break;
     }
-  }
   }
 
   document.getElementById("chatTotal").innerHTML = total1;
@@ -1101,7 +1163,7 @@ async function fazGet_produtividadeUso() {
       row.getElementsByTagName('td')[6].innerHTML,
       row.getElementsByTagName('td')[7].innerHTML
     ];
-        // Convert the login and logout times to minutes
+    // Convert the login and logout times to minutes
     const [loginHours, loginMinutes, loginSeconds] = rowData[2].split(':').map(Number);
     const [logoutHours, logoutMinutes, logoutSeconds] = rowData[3].split(':').map(Number);
     const loginMinutes2 = loginHours * 60 + loginMinutes + Math.ceil(loginSeconds / 60);

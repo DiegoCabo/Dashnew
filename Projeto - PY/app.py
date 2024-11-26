@@ -37,7 +37,7 @@ CORS(app)
 # Função para obter os dados do banco de dados
 def get_data(interval):
     conn = pg8000.connect(
-        host="192.168.93.151",
+        host="db-prod.data-analytics.alares.net.br",
         database="sadig",
         user="eduardo_anjour",
         password="klw$$$40"
@@ -127,7 +127,7 @@ def get_data(interval):
 def USOvalidacao():
     
     conn = pg8000.connect(
-        host="192.168.93.151",
+        host="db-prod.data-analytics.alares.net.br",
         database="sadig",
         user="eduardo_anjour",
         password="klw$$$40"
@@ -232,7 +232,7 @@ def alertas():
 def pesquisa():
 
     conn = pg8000.connect(
-        host="192.168.93.151",
+        host="db-prod.data-analytics.alares.net.br",
         database="sadig",
         user="eduardo_anjour",
         password="klw$$$40"
@@ -278,7 +278,7 @@ def pesquisa_demanda2():
 
 def pesquisa_demanda_Report1():
     conn = pg8000.connect(
-        host="192.168.93.151",
+        host="db-prod.data-analytics.alares.net.br",
         database="sadig",
         user="eduardo_anjour",
         password="klw$$$40"
@@ -317,7 +317,7 @@ FROM public.callcenter_registros_atendimentos_mod0022 where data_cadastro = curr
 
 def pesquisa_demanda_Report_sac():
     conn = pg8000.connect(
-        host="192.168.93.151",
+        host="db-prod.data-analytics.alares.net.br",
         database="sadig",
         user="eduardo_anjour",
         password="klw$$$40"
@@ -550,7 +550,7 @@ def pesquisa_demanda_Report_sac():
 
 def pesquisa_demanda_Report_webby():
     conn = pg8000.connect(
-        host="192.168.93.151",
+        host="db-prod.data-analytics.alares.net.br",
         database="sadig",
         user="eduardo_anjour",
         password="klw$$$40"
@@ -643,7 +643,7 @@ count(*) desc
 
 def pesquisa_demanda_Report2():
     conn = pg8000.connect(
-        host="192.168.93.151",
+        host="db-prod.data-analytics.alares.net.br",
         database="sadig",
         user="eduardo_anjour",
         password="klw$$$40"
@@ -671,7 +671,7 @@ def pesquisa_demanda_Report2():
 
 def pesquisa_demanda_Report3():
     conn = pg8000.connect(
-        host="192.168.93.151",
+        host="db-prod.data-analytics.alares.net.br",
         database="sadig",
         user="eduardo_anjour",
         password="klw$$$40"
@@ -764,7 +764,7 @@ def indexx():
 
 def index60():
     conn = pg8000.connect(
-        host="192.168.93.151",
+        host="db-prod.data-analytics.alares.net.br",
         database="sadig",
         user="eduardo_anjour",
         password="klw$$$40"
@@ -800,6 +800,8 @@ def fazGET_GERAL():
     url = f"https://grupo-conexao.evolux.io/api/v1/report/answered_abandoned_sla?token=8d4f1854-0f49-4723-96cc-a7e8fff267fb&start_date={start_date}T03%3A00%3A00.000000Z&end_date={end_date}T02%3A59%3A00.000000Z&entity=queue_groups&queue_or_group=queue_groups&queue_group_ids=65&queue_group_ids=66&queue_group_ids=67&state=&group_by=half_hour&week_day=0&start_hour=00&end_hour=00"
     url_sac = f"https://grupo-conexao.evolux.io/api/v1/report/answered_abandoned_sla?token=cb6cd843-81c7-4621-9fea-0ce7e57b3398&start_date={start_date}T03%3A00%3A00.000000Z&end_date={end_date}T02%3A59%3A00.000000Z&entity=queue_groups&queue_or_group=queue_groups&queue_group_ids=65&state=&group_by=half_hour&week_day=0&start_hour=00&end_hour=00"
     url_hd = f"https://grupo-conexao.evolux.io/api/v1/report/answered_abandoned_sla?token=55ec42aa-9c5d-4e44-8214-77e91ace494e&start_date={start_date}T03%3A00%3A00.000000Z&end_date={end_date}T02%3A59%3A00.000000Z&entity=queue_groups&queue_or_group=queue_groups&queue_group_ids=66&state=&group_by=half_hour&week_day=0&start_hour=00&end_hour=00"
+    url_webby = f"https://grupo-conexao.evolux.io/api/v1/report/answered_abandoned_sla?token=91440272-3f9c-45b3-8177-b2dd49c49920&start_date={start_date}T03%3A00%3A00.000000Z&end_date={end_date}T02%3A59%3A00.000000Z&entity=queue_groups&queue_or_group=queue_groups&queue_group_ids=72&queue_group_ids=73&queue_group_ids=74&state&group_by=half_hour&week_day=0&start_hour=00&end_hour=00"
+
 
     response = requests.get(url)
     time. sleep(5)
@@ -807,18 +809,24 @@ def fazGET_GERAL():
     time. sleep(5)
     response_hd = requests.get(url_hd)
     time. sleep(5)
+    response_webby = requests.get(url_webby)
+    time. sleep(5)
 
     data = response.json()
     dataSAC = response_sac.json()
     dataHD = response_hd.json()
+    dataWEBBY = response_webby.json()
+
 
     dados = data["data"]
     dadosSAC = dataSAC["data"]
     dadosHD = dataHD["data"]
+    dadosWEBBY = dataWEBBY["data"]
 
     vetor_geral = []
     vetor_geral_SAC = []
     vetor_geral_HD = []
+    vetor_geral_WEBBY = []
 
     for dado in dados:
         Total = dado["calls"]
@@ -908,7 +916,8 @@ def fazGET_GERAL():
                 "tmeHD": tmeHD,
                 "tmaHD": tmaHD
             })
-        """for dadowebby in dadoswebby:
+
+        for dadowebby in dadosWEBBY:
             Totalwebby = dadowebby["calls"]
             atendidaswebby = dadowebby["answered"]
             Percentwebby = int(dadowebby["answered_percent"])
@@ -928,16 +937,16 @@ def fazGET_GERAL():
 
             tmawebby = "{:02d}:{:02d}:{:02d}".format(int(hourswebby), int(minuteswebby), int(secondswebby))
                     
-            vetor_geral_webby.append({
+            vetor_geral_WEBBY.append({
                 "Totalwebby": Totalwebby,
                 "atendidaswebby": atendidaswebby,
                 "Percentwebby": round(Percentwebby,3),
                 "Natendidaswebby": Natendidaswebby,
                 "tmewebby": tmewebby,
                 "tmawebby": tmawebby
-            })"""    
+            })
 
-    cards = [vetor_geral[48],vetor_geral_SAC[48],vetor_geral_HD[48]]
+    cards = [vetor_geral[48],vetor_geral_SAC[48],vetor_geral_HD[48],vetor_geral_WEBBY[48]]
     return cards
 
 
@@ -1281,7 +1290,7 @@ def update_agent(agent_id):
 
 def caminho():
     conn = pg8000.connect(
-        host="192.168.93.151",
+        host="db-prod.data-analytics.alares.net.br",
         database="sadig",
         user="eduardo_anjour",
         password="klw$$$40"
@@ -1309,7 +1318,7 @@ def caminho():
 @app.route('/quadro')
 def quadro():
     conn = pg8000.connect(
-        host="192.168.93.151",
+        host="db-prod.data-analytics.alares.net.br",
         database="sadig",
         user="eduardo_anjour",
         password="klw$$$40"
@@ -1426,6 +1435,25 @@ def chat():
     else:
         return f"Error: HTTP status code {response.status_code}"
     
+
+@app.route('/B2B', methods=['GET'])
+def chatt():
+
+    url = "https://usodigital.net/portal/pages/omni_monitor_online.php"
+    headers = {
+        "Accept": "*/*",
+        "User-Agent": "Thunder Client (https://www.thunderclient.com)",
+        "Cookie": "PHPSESSID=8gcmbc1jubdua0m1jtn3o09v03"
+    }
+
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        result = response.text 
+        return result
+    else:
+        return f"Error: HTTP status code {response.status_code}"
+
 
 @app.route('/tempoPausa', methods=['POST'])
 
@@ -1650,6 +1678,10 @@ def index600():
 
     return render_template('mapa.html')  
 
+@app.route('/mapaUSO')
+def index6000():
+
+    return render_template('mapaUSO.html')  
 
 @app.route('/logados')
 
@@ -1657,7 +1689,7 @@ def logados_escalados():
 
     #logados e escalados
     conn = pg8000.connect(
-        host="192.168.93.151",
+        host="db-prod.data-analytics.alares.net.br",
         database="sadig",
         user="eduardo_anjour",
         password="klw$$$40"
